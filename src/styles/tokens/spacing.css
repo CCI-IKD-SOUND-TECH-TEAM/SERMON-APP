@@ -1,0 +1,27 @@
+/* Overflow — Spacing, radius, shadow, layout tokens */
+:root {
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-6: 24px;
+  --space-8: 32px;
+  --space-12: 48px;
+  --space-16: 64px;
+
+  --radius-sm: 6px;
+  --radius-md: 12px;
+  --radius-lg: 20px;
+  --radius-pill: 999px;
+
+  --shadow-card: 0 1px 3px rgba(31,27,22,0.08), 0 1px 2px rgba(31,27,22,0.06);
+  --shadow-card-hover: 0 4px 12px rgba(31,27,22,0.10), 0 2px 4px rgba(31,27,22,0.06);
+  --shadow-modal: 0 12px 32px rgba(31,27,22,0.18), 0 4px 10px rgba(31,27,22,0.10);
+
+  --container-max: 1200px;
+  --container-pad: 24px;
+  --container-pad-mobile: 16px;
+
+  --motion-fast: 150ms ease-out; /* @kind other */
+  --motion-base: 200ms ease-out; /* @kind other */
+}

@@ -1,0 +1,124 @@
+/* Overflow app — global stylesheet entry point.
+   Tailwind CSS v4 + Overflow Design System tokens. */
+@import url('./tokens/fonts.css') layer(base);
+@import url('./tokens/colors.css') layer(base);
+@import url('./tokens/typography.css') layer(base);
+@import url('./tokens/spacing.css') layer(base);
+@import "tailwindcss";
+
+/* ── Tailwind v4 theme extensions ── */
+@theme {
+  /* Colors — maps CSS vars to Tailwind utilities like bg-primary, text-ink, etc. */
+  --color-primary: #C7791F;
+  --color-primary-dark: #9C5B14;
+  --color-primary-light: #F4E3C9;
+  --color-accent: #2C5F5B;
+  --color-accent-dark: #204542;
+  --color-accent-light: #D9E7E5;
+  --color-ink: #1F1B16;
+  --color-ink-muted: #5C564C;
+  --color-ink-faint: #A69C8D;
+  --color-bg: #FBF8F3;
+  --color-surface: #FFFFFF;
+  --color-border: #E7E0D4;
+  --color-success: #2F7D5A;
+  --color-success-bg: #E1EFE7;
+  --color-warning: #B8860B;
+  --color-warning-bg: #F6EAD1;
+  --color-danger: #B3401E;
+  --color-danger-bg: #F5E1DA;
+  --color-overlay: rgba(31, 27, 22, 0.92);
+
+  /* Fonts */
+  --font-display: 'Fraunces', Georgia, serif;
+  --font-body: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+
+  /* Spacing scale (extends Tailwind's default) */
+  --spacing-1: 4px;
+  --spacing-2: 8px;
+  --spacing-3: 12px;
+  --spacing-4: 16px;
+  --spacing-6: 24px;
+  --spacing-8: 32px;
+  --spacing-12: 48px;
+  --spacing-16: 64px;
+
+  /* Border radius */
+  --radius-sm: 6px;
+  --radius-md: 12px;
+  --radius-lg: 20px;
+  --radius-pill: 999px;
+
+  /* Shadows */
+  --shadow-card: 0 1px 3px rgba(31,27,22,0.08), 0 1px 2px rgba(31,27,22,0.06);
+  --shadow-card-hover: 0 4px 12px rgba(31,27,22,0.10), 0 2px 4px rgba(31,27,22,0.06);
+  --shadow-modal: 0 12px 32px rgba(31,27,22,0.18), 0 4px 10px rgba(31,27,22,0.10);
+}
+
+/* ── Global resets ── */
+@layer base {
+  *,
+  *::before,
+  *::after {
+    box-sizing: border-box;
+  }
+
+  html,
+  body {
+    margin: 0;
+    padding: 0;
+  }
+
+  body {
+    font: var(--text-body);
+    color: var(--color-ink);
+    background: var(--color-bg);
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  a {
+    color: inherit;
+  }
+
+  /* Accessibility: always-visible focus ring, never removed without replacement. */
+  :focus-visible {
+    outline: 2px solid var(--color-focus-ring);
+    outline-offset: 2px;
+  }
+}
+
+@layer components {
+  .responsive-header {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--space-4);
+  }
+  @media (min-width: 640px) {
+    .responsive-header {
+      flex-direction: row;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0;
+    }
+  }
+}
+
+/* Global keyframes reused by components (spinner, lightbox entrance). */
+@keyframes overflow-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes overflow-lightbox-in {
+  from {
+    opacity: 0;
+    transform: scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
