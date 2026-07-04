@@ -5,17 +5,24 @@ import React from 'react';
 export type ButtonVariant = 'primary' | 'secondary' | 'ghost' | 'destructive';
 export type ButtonSize = 'sm' | 'md' | 'lg';
 
-const VARIANT_STYLES: Record<ButtonVariant, string> = {
-  primary: 'bg-primary text-white border-transparent hover:bg-primary-dark focus:ring-primary',
-  secondary: 'bg-transparent text-ink border-ink hover:bg-primary-light focus:ring-ink',
-  ghost: 'bg-transparent text-ink border-transparent hover:bg-primary-light focus:ring-ink',
-  destructive: 'bg-danger text-white border-transparent hover:bg-[#932F16] focus:ring-danger',
+const VARIANT_STYLES: Record<ButtonVariant, React.CSSProperties> = {
+  primary: { background: 'var(--color-primary)', color: '#fff', border: '1px solid transparent' },
+  secondary: { background: 'transparent', color: 'var(--color-ink)', border: '1px solid var(--color-ink)' },
+  ghost: { background: 'transparent', color: 'var(--color-ink)', border: '1px solid transparent' },
+  destructive: { background: 'var(--color-danger)', color: '#fff', border: '1px solid transparent' },
 };
 
-const SIZE_STYLES: Record<ButtonSize, string> = {
-  sm: 'py-2 px-[14px] font-semibold text-[13px] leading-none font-body',
-  md: 'py-3 px-5 font-button',
-  lg: 'py-[14px] px-[26px] font-semibold text-[16px] leading-none font-body',
+const SIZE_STYLES: Record<ButtonSize, React.CSSProperties> = {
+  sm: { padding: '8px 14px', font: '600 13px/1 var(--font-body)' },
+  md: { padding: '12px 20px', font: 'var(--text-button)' },
+  lg: { padding: '14px 26px', font: '600 16px/1 var(--font-body)' },
+};
+
+const HOVER_BG: Record<ButtonVariant, string> = {
+  primary: 'var(--color-primary-dark)',
+  secondary: 'var(--color-primary-light)',
+  ghost: 'var(--color-primary-light)',
+  destructive: '#932F16',
 };
 
 export interface ButtonProps {
@@ -48,20 +55,56 @@ export function Button({
   style: propStyle,
   className,
 }: ButtonProps) {
+  const [hover, setHover] = React.useState(false);
   const variantStyle = VARIANT_STYLES[variant] || VARIANT_STYLES.primary;
   const sizeStyle = SIZE_STYLES[size] || SIZE_STYLES.md;
-  const baseClasses = "inline-flex items-center justify-center gap-2 rounded-sm border outline-none transition-colors duration-300 focus:ring-2 focus:ring-offset-2 focus:ring-offset-surface disabled:opacity-40 disabled:cursor-not-allowed";
+
+  const style: React.CSSProperties = {
+    ...variantStyle,
+    ...sizeStyle,
+    borderRadius: 'var(--radius-sm)',
+    display: 'inline-flex',
+    alignItems: 'center',
+    gap: 8,
+    cursor: disabled ? 'not-allowed' : 'pointer',
+    opacity: disabled ? 0.4 : 1,
+    transition:
+      'background var(--motion-base), color var(--motion-base), border-color var(--motion-base)',
+    outline: 'none',
+  };
+
+  if (hover && !disabled && !loading) {
+    style.background = HOVER_BG[variant];
+  }
 
   return (
     <button
       type={type}
-      style={propStyle}
-      className={`${baseClasses} ${variantStyle} ${sizeStyle} ${className || ''}`}
+      style={{ ...style, ...(propStyle || {}) }}
+      className={className}
       disabled={disabled || loading}
       onClick={onClick}
+      onMouseEnter={() => setHover(true)}
+      onMouseLeave={() => setHover(false)}
+      onFocus={(e) => {
+        e.currentTarget.style.boxShadow =
+          '0 0 0 2px var(--color-surface), 0 0 0 4px var(--color-focus-ring)';
+      }}
+      onBlur={(e) => {
+        e.currentTarget.style.boxShadow = 'none';
+      }}
     >
       {loading ? (
-        <span className="w-3.5 h-3.5 rounded-full border-2 border-current border-t-transparent animate-[overflow-spin_0.7s_linear_infinite]" />
+        <span
+          style={{
+            width: 14,
+            height: 14,
+            borderRadius: '50%',
+            border: '2px solid currentColor',
+            borderTopColor: 'transparent',
+            animation: 'overflow-spin 0.7s linear infinite',
+          }}
+        />
       ) : (
         icon
       )}

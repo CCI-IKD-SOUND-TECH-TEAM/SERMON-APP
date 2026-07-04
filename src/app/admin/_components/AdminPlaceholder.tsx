@@ -13,8 +13,20 @@ export interface AdminPlaceholderProps {
 export function AdminPlaceholder({ title, message }: AdminPlaceholderProps) {
   return (
     <div>
-      <h1 className="font-h1 text-ink m-0 mb-1">{title}</h1>
-      <div className="mt-8 border border-border rounded-md bg-surface py-12 px-8 text-center font-body text-ink-muted max-w-[560px]">
+      <h1 style={{ font: 'var(--text-h1)', color: 'var(--color-ink)', margin: '0 0 4px' }}>{title}</h1>
+      <div
+        style={{
+          marginTop: 'var(--space-8)',
+          border: '1px solid var(--color-border)',
+          borderRadius: 'var(--radius-md)',
+          background: 'var(--color-surface)',
+          padding: 'var(--space-12) var(--space-8)',
+          textAlign: 'center',
+          font: 'var(--text-body)',
+          color: 'var(--color-ink-muted)',
+          maxWidth: 560,
+        }}
+      >
         {message}
       </div>
     </div>

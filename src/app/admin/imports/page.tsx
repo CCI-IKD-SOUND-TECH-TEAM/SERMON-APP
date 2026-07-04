@@ -82,8 +82,8 @@ export default function ImportsPage() {
     <div>
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
         <div>
-          <h1 className="font-h1 text-ink m-0 mb-1">Pending Inbox</h1>
-          <div className="font-body text-ink-muted">
+          <h1 style={{ font: 'var(--text-h1)', color: 'var(--color-ink)', margin: '0 0 4px' }}>Pending Inbox</h1>
+          <div style={{ font: 'var(--text-body)', color: 'var(--color-ink-muted)' }}>
             Files uploaded to the Google Drive Ready folder await curation.
           </div>
         </div>
@@ -96,11 +96,11 @@ export default function ImportsPage() {
         </Button>
       </div>
 
-      <div>
+      <div className="sm:bg-surface sm:border sm:border-border rounded-md sm:overflow-hidden">
         {loading ? (
-          <div className="bg-surface border border-border rounded-md overflow-hidden p-8 text-center text-ink-muted font-body">Loading inbox...</div>
+          <div className="p-8 text-center text-ink-muted font-body">Loading inbox...</div>
         ) : imports.length === 0 ? (
-          <div className="bg-surface border border-border rounded-md overflow-hidden p-12 flex flex-col items-center justify-center text-ink-muted border-dashed border-2 m-4">
+          <div className="p-12 flex flex-col items-center justify-center text-ink-muted border-dashed border-2 border-border m-4 rounded-md">
             <AlertCircle className="mb-4" size={32} />
             <h3 className="font-display text-lg font-semibold text-ink mb-1">Inbox is empty</h3>
             <p className="font-body text-sm text-center max-w-sm">

@@ -3,6 +3,7 @@
 import React from 'react';
 import Link from 'next/link';
 import { Menu, X } from 'lucide-react';
+import { ThemeToggle } from '@/components/ui/ThemeToggle';
 
 export interface PublicNavLink {
   label: string;
@@ -48,29 +49,33 @@ export function PublicNav({ links = [], active }: PublicNavProps) {
               Overflow
             </Link>
 
-            {/* Desktop links */}
+            {/* Desktop links & Theme */}
             <div className="hidden md:flex items-center gap-[28px]">
               {links.map((l) => (
                 <Link
                   key={l.label}
                   href={l.href}
-                  className={`font-body font-semibold text-[15px] leading-none no-underline ${
-                    l.label === active ? 'text-primary' : 'text-ink'
-                  }`}
+                  className={`font-body font-semibold text-[15px] leading-none no-underline ${l.label === active ? 'text-primary' : 'text-ink'
+                    }`}
                 >
                   {l.label}
                 </Link>
               ))}
+              <div className="w-px h-4 bg-border mx-1" />
+              <ThemeToggle />
             </div>
 
-            {/* Mobile hamburger button */}
-            <button
-              onClick={() => setMenuOpen(!menuOpen)}
-              aria-label={menuOpen ? 'Close menu' : 'Open menu'}
-              className="flex md:hidden bg-transparent border-none p-[6px] cursor-pointer text-ink items-center justify-center"
-            >
-              {menuOpen ? <X width={24} height={24} /> : <Menu width={24} height={24} />}
-            </button>
+            {/* Mobile actions */}
+            <div className="flex md:hidden items-center gap-2">
+              <ThemeToggle />
+              <button
+                onClick={() => setMenuOpen(!menuOpen)}
+                aria-label={menuOpen ? 'Close menu' : 'Open menu'}
+                className="bg-transparent border-none p-[6px] cursor-pointer text-ink flex items-center justify-center"
+              >
+                {menuOpen ? <X width={24} height={24} /> : <Menu width={24} height={24} />}
+              </button>
+            </div>
           </div>
         </nav>
 
@@ -82,9 +87,8 @@ export function PublicNav({ links = [], active }: PublicNavProps) {
                 key={l.label}
                 href={l.href}
                 onClick={() => setMenuOpen(false)}
-                className={`block py-[14px] font-body font-semibold text-[16px] leading-none no-underline border-b border-border ${
-                  l.label === active ? 'text-primary' : 'text-ink'
-                }`}
+                className={`block py-[14px] font-body font-semibold text-[16px] leading-none no-underline border-b border-border ${l.label === active ? 'text-primary' : 'text-ink'
+                  }`}
               >
                 {l.label}
               </Link>
@@ -110,3 +114,4 @@ export function PublicNav({ links = [], active }: PublicNavProps) {
     </>
   );
 }
+

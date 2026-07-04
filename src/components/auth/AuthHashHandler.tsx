@@ -38,8 +38,8 @@ export function AuthHashHandler() {
 
   if (isProcessing) {
     return (
-      <div className="fixed inset-0 z-[99999] bg-bg flex items-center justify-center">
-        <p className="font-body text-ink-muted">Preparing your account...</p>
+      <div style={{ position: 'fixed', inset: 0, zIndex: 99999, background: 'var(--color-bg)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+        <p style={{ font: 'var(--text-body)', color: 'var(--color-ink-muted)' }}>Preparing your account...</p>
       </div>
     );
   }

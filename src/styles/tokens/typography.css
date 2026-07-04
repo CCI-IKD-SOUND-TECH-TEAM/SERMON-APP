@@ -1,7 +1,7 @@
 /* Overflow — Type tokens */
 :root {
   --font-display: 'Fraunces', Georgia, serif;
-  --font-body: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-body: 'Fraunces', Georgia, serif;
 
   /* Desktop scale */
   --text-hero: 600 48px/1.2 var(--font-display);

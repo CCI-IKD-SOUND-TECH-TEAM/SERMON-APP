@@ -50,26 +50,15 @@ export async function POST(request: Request) {
   const admin = createAdminClient();
   
   // 1. Invite user
-  const requestUrl = new URL(request.url);
-  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || requestUrl.origin;
-  const redirectUrl = new URL('/admin/login', siteUrl);
-  redirectUrl.searchParams.set('redirectTo', '/admin/update-password');
-  
-  const { data: inviteData, error: inviteError } = await admin.auth.admin.inviteUserByEmail(email, {
-    redirectTo: redirectUrl.toString(),
-  });
+  const { data: inviteData, error: inviteError } = await admin.auth.admin.inviteUserByEmail(email);
   if (inviteError) {
     console.error('Invite error:', inviteError);
     const status = inviteError.status || 500;
-    let message = inviteError.message || 'Unknown error';
+    let message = inviteError.message;
+    if (status === 429) message = 'Rate limit exceeded. Please wait a moment before sending more invitations.';
+    else if (status === 422 || message.includes('already registered')) message = 'This user is already registered or has a pending invitation.';
     
-    if (status === 429 || message.toLowerCase().includes('rate') || message.toLowerCase().includes('rate_limit')) {
-      message = 'Rate limit exceeded. Please wait a moment before sending more invitations.';
-    } else if (status === 422 || message.toLowerCase().includes('already registered')) {
-      message = 'This user is already registered or has a pending invitation.';
-    }
-    
-    return NextResponse.json({ error: message }, { status: status === 429 ? 429 : status });
+    return NextResponse.json({ error: message }, { status });
   }
 
   // 2. Update their profile role to what was requested

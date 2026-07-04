@@ -35,16 +35,34 @@ export function Lightbox({ photo, onClose, onPrev, onNext, onDownload }: Lightbo
 
   if (!photo) return null;
 
+  const overlayStyle: React.CSSProperties = {
+    position: 'fixed',
+    inset: 0,
+    background: 'var(--color-overlay)',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    zIndex: 1000,
+    animation: 'overflow-lightbox-in 200ms ease-out',
+  };
+  const iconBtn: React.CSSProperties = {
+    position: 'absolute',
+    background: 'transparent',
+    border: 'none',
+    color: '#fff',
+    cursor: 'pointer',
+  };
+
   return (
-    <div className="fixed inset-0 bg-overlay flex items-center justify-center z-[1000] animate-[overflow-lightbox-in_200ms_ease-out]" role="dialog" aria-modal="true" aria-label={photo.alt || 'Photo viewer'}>
-      <button type="button" onClick={onClose} aria-label="Close" className="absolute bg-transparent border-none text-white cursor-pointer top-5 right-5 hover:text-white/80 transition-colors">
+    <div style={overlayStyle} role="dialog" aria-modal="true" aria-label={photo.alt || 'Photo viewer'}>
+      <button type="button" onClick={onClose} aria-label="Close" style={{ ...iconBtn, top: 20, right: 20 }}>
         <X width={28} height={28} />
       </button>
       <button
         type="button"
         onClick={onPrev}
         aria-label="Previous photo"
-        className="absolute bg-transparent border-none text-white cursor-pointer left-5 top-1/2 -translate-y-1/2 hover:text-white/80 transition-colors"
+        style={{ ...iconBtn, left: 20, top: '50%', transform: 'translateY(-50%)' }}
       >
         <ChevronLeft width={32} height={32} />
       </button>
@@ -52,20 +70,25 @@ export function Lightbox({ photo, onClose, onPrev, onNext, onDownload }: Lightbo
         <img
           src={photo.src}
           alt={photo.alt || ''}
-          className="max-w-[80vw] max-h-[80vh] rounded-sm object-contain"
+          style={{ maxWidth: '80vw', maxHeight: '80vh', borderRadius: 'var(--radius-sm)', objectFit: 'contain' }}
         />
       ) : (
         <div
           aria-label={photo.alt || ''}
-          className="w-[60vw] max-w-[640px] aspect-[4/3] rounded-sm"
-          style={{ background: photo.color || 'var(--color-accent-light)' }}
+          style={{
+            width: '60vw',
+            maxWidth: 640,
+            aspectRatio: '4/3',
+            background: photo.color || 'var(--color-accent-light)',
+            borderRadius: 'var(--radius-sm)',
+          }}
         />
       )}
       <button
         type="button"
         onClick={onNext}
         aria-label="Next photo"
-        className="absolute bg-transparent border-none text-white cursor-pointer right-5 top-1/2 -translate-y-1/2 hover:text-white/80 transition-colors"
+        style={{ ...iconBtn, right: 20, top: '50%', transform: 'translateY(-50%)' }}
       >
         <ChevronRight width={32} height={32} />
       </button>
@@ -73,7 +96,17 @@ export function Lightbox({ photo, onClose, onPrev, onNext, onDownload }: Lightbo
         type="button"
         onClick={onDownload}
         aria-label="Download photo"
-        className="absolute bg-transparent text-white cursor-pointer bottom-5 right-5 border border-white rounded-sm py-2 px-3 inline-flex items-center gap-[6px] hover:bg-white/10 transition-colors"
+        style={{
+          ...iconBtn,
+          bottom: 20,
+          right: 20,
+          border: '1px solid #fff',
+          borderRadius: 'var(--radius-sm)',
+          padding: '8px 12px',
+          display: 'inline-flex',
+          alignItems: 'center',
+          gap: 6,
+        }}
       >
         <Download width={16} height={16} />
         Download

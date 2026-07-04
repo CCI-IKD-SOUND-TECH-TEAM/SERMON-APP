@@ -13,6 +13,7 @@ import {
   X,
   type LucideIcon,
 } from 'lucide-react';
+import { ThemeToggle } from '@/components/ui/ThemeToggle';
 
 export interface AdminSidebarItem {
   key: string;
@@ -65,14 +66,12 @@ export function AdminSidebar({ items = ADMIN_NAV_ITEMS, active = 'dashboard', co
       const isActive = it.key === active;
       const Icon = it.icon;
       return (
-      return (
         <Link
           key={it.key}
           href={it.href}
           onClick={closeFn}
-          className={`flex items-center gap-[10px] py-[9px] px-[10px] rounded-sm font-semibold text-[14px] leading-none font-body no-underline ${
-            isActive ? 'bg-primary-light text-primary-dark' : 'bg-transparent text-ink'
-          } ${collapsed ? 'justify-center' : 'justify-start'}`}
+          className={`flex items-center gap-[10px] py-[9px] px-[10px] rounded-sm font-semibold text-[14px] leading-none font-body no-underline ${isActive ? 'bg-primary-light text-primary-dark' : 'bg-transparent text-ink'
+            } ${collapsed ? 'justify-center' : 'justify-start'}`}
         >
           <Icon width={18} height={18} className="shrink-0" />
           {!collapsed && it.label}
@@ -90,13 +89,16 @@ export function AdminSidebar({ items = ADMIN_NAV_ITEMS, active = 'dashboard', co
         >
           Overflow
         </Link>
-        <button
-          onClick={() => setMobileOpen(true)}
-          aria-label="Open navigation menu"
-          className="bg-transparent border-none p-2 cursor-pointer text-ink flex items-center justify-center"
-        >
-          <Menu width={24} height={24} />
-        </button>
+        <div className="flex items-center gap-2">
+          <ThemeToggle />
+          <button
+            onClick={() => setMobileOpen(true)}
+            aria-label="Open navigation menu"
+            className="bg-transparent border-none p-2 cursor-pointer text-ink flex items-center justify-center"
+          >
+            <Menu width={24} height={24} />
+          </button>
+        </div>
       </div>
 
       {/* ── Mobile overlay drawer ── */}
@@ -155,7 +157,11 @@ export function AdminSidebar({ items = ADMIN_NAV_ITEMS, active = 'dashboard', co
           </Link>
         )}
         {renderNavLinks()}
+        <div style={{ marginTop: 'auto', paddingTop: 16, display: 'flex', justifyContent: collapsed ? 'center' : 'flex-start', padding: collapsed ? '16px 0 0 0' : '16px 10px 0 10px' }}>
+          <ThemeToggle />
+        </div>
       </nav>
     </>
   );
 }
+

@@ -42,7 +42,7 @@ export function ContentTable({ rows, onChanged }: ContentTableProps) {
       ]}
       rows={rows}
       renderActions={(row) => (
-        <div className={`flex gap-1 justify-end ${busyId === row.id ? 'opacity-50' : 'opacity-100'}`}>
+        <div style={{ display: 'flex', gap: 4, justifyContent: 'flex-end', opacity: busyId === row.id ? 0.5 : 1 }}>
           {row.kind === 'sermon' && (
             <IconButton
               label="Edit"

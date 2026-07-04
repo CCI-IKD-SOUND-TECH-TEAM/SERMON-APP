@@ -40,24 +40,24 @@ export default function UpdatePasswordPage() {
   }
 
   return (
-    <div className="max-w-[400px] mx-auto pt-12">
-      <div className="bg-surface border border-border rounded-md p-8">
-        <h1 className="font-h2 text-ink m-0 mb-2">
+    <div style={{ maxWidth: 400, margin: '0 auto', paddingTop: 'var(--space-12)' }}>
+      <div style={{ background: 'var(--color-surface)', border: '1px solid var(--color-border)', borderRadius: 'var(--radius-md)', padding: 'var(--space-8)' }}>
+        <h1 style={{ font: 'var(--text-h2)', color: 'var(--color-ink)', margin: '0 0 var(--space-2)' }}>
           Welcome to Overflow
         </h1>
-        <p className="font-body text-ink-muted m-0 mb-6">
+        <p style={{ font: 'var(--text-body)', color: 'var(--color-ink-muted)', margin: '0 0 var(--space-6)' }}>
           You've been invited! Please set a secure password to complete your account setup.
         </p>
 
-        <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+        <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
           {error && (
-            <div className="bg-danger-bg text-danger py-3 px-4 rounded-sm font-body-sm">
+            <div style={{ background: 'var(--color-danger-bg)', color: 'var(--color-danger)', padding: '12px 16px', borderRadius: 'var(--radius-sm)', font: 'var(--text-body-sm)' }}>
               {error}
             </div>
           )}
           
           <FormField label="New Password" htmlFor="password">
-            <div className="relative">
+            <div style={{ position: 'relative' }}>
               <Input
                 id="password"
                 type={showPassword ? 'text' : 'password'}
@@ -65,12 +65,12 @@ export default function UpdatePasswordPage() {
                 onChange={setPassword}
                 required
                 minLength={6}
-                className="pr-10"
+                style={{ paddingRight: 40 }}
               />
               <button
                 type="button"
                 onClick={() => setShowPassword(!showPassword)}
-                className="absolute right-3 top-1/2 -translate-y-1/2 bg-transparent border-none text-ink-muted cursor-pointer p-0 flex items-center"
+                style={{ position: 'absolute', right: 12, top: '50%', transform: 'translateY(-50%)', background: 'none', border: 'none', color: 'var(--color-ink-muted)', cursor: 'pointer', padding: 0, display: 'flex' }}
                 tabIndex={-1}
               >
                 {showPassword ? <EyeOff width={16} height={16} /> : <Eye width={16} height={16} />}
@@ -79,7 +79,7 @@ export default function UpdatePasswordPage() {
           </FormField>
           
           <FormField label="Confirm Password" htmlFor="confirmPassword">
-            <div className="relative">
+            <div style={{ position: 'relative' }}>
               <Input
                 id="confirmPassword"
                 type={showPassword ? 'text' : 'password'}
@@ -87,12 +87,12 @@ export default function UpdatePasswordPage() {
                 onChange={setConfirmPassword}
                 required
                 minLength={6}
-                className="pr-10"
+                style={{ paddingRight: 40 }}
               />
             </div>
           </FormField>
 
-          <Button type="submit" variant="primary" loading={loading} className="mt-2">
+          <Button type="submit" variant="primary" loading={loading} style={{ marginTop: 8 }}>
             Save password
           </Button>
         </form>

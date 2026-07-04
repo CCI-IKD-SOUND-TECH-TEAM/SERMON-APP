@@ -104,7 +104,18 @@ export default function NewSermonPage() {
   const backLink = (
     <button
       onClick={() => router.push('/admin/sermons')}
-      className="bg-transparent border-none text-ink-muted font-semibold text-[14px] leading-none font-body cursor-pointer flex items-center gap-[6px] mb-6 p-0 hover:text-ink transition-colors"
+      style={{
+        background: 'none',
+        border: 'none',
+        color: 'var(--color-ink-muted)',
+        font: '600 14px/1 var(--font-body)',
+        cursor: 'pointer',
+        display: 'flex',
+        alignItems: 'center',
+        gap: 6,
+        marginBottom: 'var(--space-6)',
+        padding: 0,
+      }}
     >
       <ChevronLeft width={16} height={16} /> Back to sermons
     </button>
@@ -114,11 +125,16 @@ export default function NewSermonPage() {
     <div>
       {backLink}
 
-      <div className="responsive-header mb-8">
+      <div
+        className="responsive-header"
+        style={{
+          marginBottom: 'var(--space-8)',
+        }}
+      >
         <div>
-          <h1 className="font-h1 text-ink m-0 mb-2">New sermon</h1>
+          <h1 style={{ font: 'var(--text-h1)', color: 'var(--color-ink)', margin: '0 0 8px' }}>New sermon</h1>
         </div>
-        <div className="flex gap-2">
+        <div style={{ display: 'flex', gap: 8 }}>
           <Button variant="secondary" loading={saving === 'draft'} onClick={() => save('pending_review', 'draft')}>
             Save draft
           </Button>
@@ -129,12 +145,12 @@ export default function NewSermonPage() {
       </div>
 
       {errorMsg && (
-        <div className="p-3 bg-danger-bg text-danger rounded-md mb-4">
+        <div style={{ padding: '12px', background: 'var(--color-danger-bg)', color: 'var(--color-danger)', borderRadius: 6, marginBottom: 16 }}>
           {errorMsg}
         </div>
       )}
 
-      <div className="max-w-[460px]">
+      <div style={{ maxWidth: 460 }}>
         <ImageUpload label="Cover Image" value={thumbnailUrl} onChange={setThumbnailUrl} hint="Recommended size: 1280x720" />
         <FormField label="Title" htmlFor="title">
           <Input id="title" value={title} onChange={setTitle} />
@@ -153,7 +169,7 @@ export default function NewSermonPage() {
             type="file" 
             accept="audio/*,video/*"
             onChange={(e) => setFile(e.target.files?.[0] || null)}
-            className="block mt-2"
+            style={{ display: 'block', marginTop: 8 }}
           />
         </FormField>
       </div>

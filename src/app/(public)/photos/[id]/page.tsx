@@ -36,27 +36,38 @@ export default function AlbumPage() {
   }, [photos]);
 
   return (
-    <div className="max-w-[var(--container-max)] mx-auto py-8 px-[var(--container-pad)]">
+    <div style={{ maxWidth: 'var(--container-max)', margin: '0 auto', padding: 'var(--space-8) var(--container-pad)' }}>
       <button
         onClick={() => router.push('/photos')}
-        className="bg-transparent border-none text-ink-muted font-semibold text-[14px] leading-none font-body cursor-pointer flex items-center gap-[6px] mb-6 p-0 hover:text-ink transition-colors"
+        style={{
+          background: 'none',
+          border: 'none',
+          color: 'var(--color-ink-muted)',
+          font: '600 14px/1 var(--font-body)',
+          cursor: 'pointer',
+          display: 'flex',
+          alignItems: 'center',
+          gap: 6,
+          marginBottom: 'var(--space-6)',
+          padding: 0,
+        }}
       >
         <ChevronLeft width={16} height={16} /> Back to albums
       </button>
 
       {album === null && (
-        <p className="font-body text-ink-muted">Loading album…</p>
+        <p style={{ font: 'var(--text-body)', color: 'var(--color-ink-muted)' }}>Loading album…</p>
       )}
       {album === 'missing' && (
-        <p className="font-body text-ink-muted">
+        <p style={{ font: 'var(--text-body)', color: 'var(--color-ink-muted)' }}>
           That album couldn&apos;t be found. It may have been moved in Drive.
         </p>
       )}
 
       {album && album !== 'missing' && (
         <>
-          <h1 className="font-h1 text-ink m-0 mb-[6px]">{album.title}</h1>
-          <div className="font-body-sm text-ink-muted mb-6">
+          <h1 style={{ font: 'var(--text-h1)', color: 'var(--color-ink)', margin: '0 0 6px' }}>{album.title}</h1>
+          <div style={{ font: 'var(--text-body-sm)', color: 'var(--color-ink-muted)', marginBottom: 'var(--space-6)' }}>
             {album.event_date} · {count} photos
           </div>
 

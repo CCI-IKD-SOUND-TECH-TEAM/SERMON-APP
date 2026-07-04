@@ -11,8 +11,12 @@ export interface AudioPlayerProps {
 
 function formatTime(seconds: number) {
   if (isNaN(seconds)) return '0:00';
-  const m = Math.floor(seconds / 60);
+  const h = Math.floor(seconds / 3600);
+  const m = Math.floor((seconds % 3600) / 60);
   const s = Math.floor(seconds % 60);
+  if (h > 0) {
+    return `${h}:${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
+  }
   return `${m}:${s.toString().padStart(2, '0')}`;
 }
 
@@ -90,7 +94,21 @@ export function AudioPlayer({
 
   if (src && !isLoaded && !hasError) {
     return (
-      <div className="bg-surface border border-border rounded-md p-4 flex flex-col items-center justify-center gap-3 max-w-[480px] min-h-[124px]">
+      <div
+        style={{
+          background: 'var(--color-surface)',
+          border: '1px solid var(--color-border)',
+          borderRadius: 'var(--radius-md)',
+          padding: 'var(--space-4)',
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          justifyContent: 'center',
+          gap: 12,
+          maxWidth: 480,
+          minHeight: 124,
+        }}
+      >
         <audio
           ref={audioRef}
           src={src}
@@ -98,16 +116,27 @@ export function AudioPlayer({
           onLoadedMetadata={handleLoadedMetadata}
           onError={() => setHasError(true)}
           onEnded={() => setPlaying(false)}
-          className="hidden"
+          style={{ display: 'none' }}
         />
-        <Loader2 className="animate-spin text-primary" width={24} height={24} />
-        <span className="font-body-sm text-ink-muted">Loading audio...</span>
+        <Loader2 className="animate-spin" style={{ color: 'var(--color-primary)' }} width={24} height={24} />
+        <span style={{ font: 'var(--text-body-sm)', color: 'var(--color-ink-muted)' }}>Loading audio...</span>
       </div>
     );
   }
 
   return (
-    <div className="bg-surface border border-border rounded-md p-4 flex flex-col gap-3 max-w-[480px]">
+    <div
+      style={{
+        background: 'var(--color-surface)',
+        border: '1px solid var(--color-border)',
+        borderRadius: 'var(--radius-md)',
+        padding: 'var(--space-4)',
+        display: 'flex',
+        flexDirection: 'column',
+        gap: 12,
+        maxWidth: 480,
+      }}
+    >
       {src && (
         <audio
           ref={audioRef}
@@ -119,33 +148,63 @@ export function AudioPlayer({
         />
       )}
       <div>
-        <div className="font-h3 text-ink">{title}</div>
-        <div className="font-body-sm text-ink-muted">{speaker}</div>
+        <div style={{ font: 'var(--text-h3)', color: 'var(--color-ink)' }}>{title}</div>
+        <div style={{ font: 'var(--text-body-sm)', color: 'var(--color-ink-muted)' }}>{speaker}</div>
       </div>
-      <div className="flex items-center gap-3">
+      <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
         <button
           type="button"
           onClick={togglePlay}
           disabled={!src}
           aria-label={playing ? 'Pause' : 'Play'}
-          className="w-10 h-10 rounded-full border-none bg-primary text-white inline-flex items-center justify-center cursor-pointer shrink-0 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-primary-dark transition-colors"
+          style={{
+            width: 40,
+            height: 40,
+            borderRadius: '50%',
+            border: 'none',
+            background: 'var(--color-primary)',
+            color: '#fff',
+            display: 'inline-flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            cursor: 'pointer',
+            flexShrink: 0,
+          }}
         >
           {playing ? <Pause width={18} height={18} /> : <Play width={18} height={18} />}
         </button>
-        <div className="flex-1">
+        <div style={{ flex: 1 }}>
           <div
             onClick={handleSeek}
-            className={`h-6 flex items-center ${src ? 'cursor-pointer' : 'cursor-default'}`}
+            style={{
+              height: 24, // larger hit area for seeking
+              display: 'flex',
+              alignItems: 'center',
+              cursor: src ? 'pointer' : 'default',
+            }}
           >
-            <div className="h-[6px] rounded-[3px] bg-ink-faint relative overflow-hidden w-full">
+            <div
+              style={{
+                height: 6,
+                borderRadius: 3,
+                background: 'var(--color-ink-faint)',
+                position: 'relative',
+                overflow: 'hidden',
+                width: '100%',
+              }}
+            >
               <div
-                className="absolute inset-y-0 left-0 bg-primary transition-[width] duration-75"
-                style={{ width: `${progress * 100}%` }}
+                style={{
+                  position: 'absolute',
+                  inset: 0,
+                  width: `${progress * 100}%`,
+                  background: 'var(--color-primary)',
+                }}
               />
             </div>
           </div>
         </div>
-        <span className="font-body-sm text-ink-muted shrink-0 min-w-[40px]">
+        <span style={{ font: 'var(--text-body-sm)', color: 'var(--color-ink-muted)', flexShrink: 0, minWidth: 40 }}>
           {formatTime(currentTime)} / {duration > 0 ? formatTime(duration) : '--:--'}
         </span>
         <button
@@ -153,7 +212,19 @@ export function AudioPlayer({
           onClick={handleDownload}
           disabled={!src}
           aria-label="Download"
-          className="inline-flex items-center gap-[6px] border border-ink bg-transparent text-ink rounded-sm py-2 px-3 font-semibold text-[13px] leading-none font-body cursor-pointer shrink-0 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-black/5 transition-colors"
+          style={{
+            display: 'inline-flex',
+            alignItems: 'center',
+            gap: 6,
+            border: '1px solid var(--color-ink)',
+            background: 'transparent',
+            color: 'var(--color-ink)',
+            borderRadius: 'var(--radius-sm)',
+            padding: '8px 12px',
+            font: '600 13px/1 var(--font-body)',
+            cursor: 'pointer',
+            flexShrink: 0,
+          }}
         >
           <Download width={14} height={14} />
           Download

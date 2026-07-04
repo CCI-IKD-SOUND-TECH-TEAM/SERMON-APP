@@ -50,7 +50,17 @@ export function ShareButton({
     return (
       <button
         disabled
-        className="inline-flex items-center gap-2 bg-surface border border-border text-ink py-2 px-4 rounded-sm font-semibold text-[14px] leading-none font-body"
+        style={{
+          display: 'inline-flex',
+          alignItems: 'center',
+          gap: 8,
+          background: 'var(--color-surface)',
+          border: '1px solid var(--color-border)',
+          color: 'var(--color-ink)',
+          padding: '8px 16px',
+          borderRadius: 'var(--radius-sm)',
+          font: '600 14px/1 var(--font-body)',
+        }}
       >
         <Share2 width={16} height={16} />
         {label}
@@ -61,7 +71,18 @@ export function ShareButton({
   return (
     <button
       onClick={handleShare}
-      className="inline-flex items-center gap-2 bg-surface border border-border text-ink py-2 px-4 rounded-sm font-semibold text-[14px] leading-none font-body cursor-pointer hover:bg-black/5 transition-colors"
+      style={{
+        display: 'inline-flex',
+        alignItems: 'center',
+        gap: 8,
+        background: 'var(--color-surface)',
+        border: '1px solid var(--color-border)',
+        color: 'var(--color-ink)',
+        padding: '8px 16px',
+        borderRadius: 'var(--radius-sm)',
+        font: '600 14px/1 var(--font-body)',
+        cursor: 'pointer',
+      }}
     >
       <Share2 width={16} height={16} />
       {label}

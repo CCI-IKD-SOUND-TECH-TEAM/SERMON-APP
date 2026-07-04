@@ -15,28 +15,40 @@ export default function PhotosPage() {
   }, []);
 
   return (
-    <div className="max-w-[var(--container-max)] mx-auto py-8 px-[var(--container-pad)]">
-      <div className="mb-8">
+    <div style={{ maxWidth: 'var(--container-max)', margin: '0 auto', padding: 'var(--space-8) var(--container-pad)' }}>
+      <div style={{ marginBottom: 'var(--space-8)' }}>
         <div
-          className="font-overline tracking-overline uppercase text-ink-muted mb-2"
+          style={{
+            font: 'var(--text-overline)',
+            letterSpacing: 'var(--tracking-overline)',
+            textTransform: 'uppercase',
+            color: 'var(--color-ink-muted)',
+            marginBottom: 8,
+          }}
         >
           Photos
         </div>
-        <h1 className="font-hero text-ink m-0 mb-2.5">Photo albums</h1>
-        <p className="font-body text-ink-muted max-w-[560px] m-0">
+        <h1 style={{ font: 'var(--text-hero)', color: 'var(--color-ink)', margin: '0 0 10px' }}>Photo albums</h1>
+        <p style={{ font: 'var(--text-body)', color: 'var(--color-ink-muted)', maxWidth: 560, margin: 0 }}>
           Browse every photo from the gatherings, weekend by weekend.
         </p>
       </div>
 
       {albums === null ? (
-        <p className="font-body text-ink-muted">Loading albums…</p>
+        <p style={{ font: 'var(--text-body)', color: 'var(--color-ink-muted)' }}>Loading albums…</p>
       ) : albums.length === 0 ? (
-        <p className="font-body text-ink-muted">
+        <p style={{ font: 'var(--text-body)', color: 'var(--color-ink-muted)' }}>
           No albums yet 
         </p>
       ) : (
-        <div className="grid gap-6 grid-cols-[repeat(auto-fill,minmax(260px,1fr))]">
-          {albums.map((a, i) => (
+        <div
+          style={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(auto-fill, minmax(260px, 1fr))',
+            gap: 'var(--space-6)',
+          }}
+        >
+          {albums.map((a) => (
             <AlbumCard
               key={a.id}
               title={a.title}
@@ -44,7 +56,6 @@ export default function PhotosPage() {
               photoCount={a.photo_count ?? 0}
               cover={a.cover_photo_url ?? ''}
               onClick={() => router.push(`/photos/${a.id}`)}
-              priority={i < 4}
             />
           ))}
         </div>

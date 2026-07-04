@@ -59,11 +59,26 @@
 
 /* Dark mode — Phase 2, opt-in via [data-theme="dark"] */
 [data-theme="dark"] {
-  --color-bg: #17140F;
-  --color-surface: #201C15;
+  --color-bg: #110E0A;
+  --color-surface: #1B1711;
   --color-border: #332E24;
   --color-primary: #E0A24B;
-  --color-primary-dark: #C7791F;
+  --color-primary-dark: #F4E3C9;
+  --color-primary-light: #3E2711;
   --color-ink: #F5F0E8;
   --color-ink-muted: #B5AB9B;
+  --color-ink-faint: #5C564C;
+
+  --color-accent: #33948F;
+  --color-accent-dark: #D9E7E5;
+  --color-accent-light: #1A3937;
+
+  --color-success: #4CAF84;
+  --color-success-bg: #1B3528;
+  --color-warning: #D9A036;
+  --color-warning-bg: #3E2F11;
+  --color-danger: #D65A38;
+  --color-danger-bg: #3F1D13;
+
+  --color-overlay: rgba(0, 0, 0, 0.85);
 }

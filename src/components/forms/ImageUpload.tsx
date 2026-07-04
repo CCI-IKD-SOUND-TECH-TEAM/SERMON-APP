@@ -84,7 +84,7 @@ export function ImageUpload({ value, onChange, label, hint }: ImageUploadProps) 
       )}
       
       {value ? (
-        <div className="relative rounded-sm border border-border overflow-hidden bg-surface group aspect-[3/4] max-w-[300px]">
+        <div className="relative rounded-sm border border-border overflow-hidden bg-surface group" style={{ aspectRatio: '3/4', maxWidth: 300 }}>
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img src={value} alt="Cover" className="w-full h-full object-cover" />
           <div className="absolute inset-0 bg-ink/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-4 backdrop-blur-sm">
@@ -99,7 +99,7 @@ export function ImageUpload({ value, onChange, label, hint }: ImageUploadProps) 
         </div>
       ) : (
         <div
-          className={`relative border-2 border-dashed rounded-sm p-8 flex flex-col items-center justify-center text-center cursor-pointer transition-colors aspect-[3/4] max-w-[300px] ${
+          className={`relative border-2 border-dashed rounded-sm p-8 flex flex-col items-center justify-center text-center cursor-pointer transition-colors ${
             dragActive ? 'border-primary bg-primary/5' : 'border-border hover:border-ink-muted bg-surface'
           }`}
           onDragEnter={handleDrag}
@@ -107,6 +107,7 @@ export function ImageUpload({ value, onChange, label, hint }: ImageUploadProps) 
           onDragOver={handleDrag}
           onDrop={handleDrop}
           onClick={() => inputRef.current?.click()}
+          style={{ aspectRatio: '3/4', maxWidth: 300 }}
         >
           <input
             ref={inputRef}

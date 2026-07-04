@@ -10,7 +10,7 @@ import { Select } from '@/components/forms/Select';
 
 export default function SermonsPage() {
   return (
-    <React.Suspense fallback={<p className="p-8">Loading sermons...</p>}>
+    <React.Suspense fallback={<p style={{ padding: 'var(--space-8)' }}>Loading sermons...</p>}>
       <SermonsList />
     </React.Suspense>
   );
@@ -66,24 +66,24 @@ function SermonsList() {
   }, [allSermons, search, speakerFilter]);
 
   return (
-    <div className="max-w-[var(--container-max)] mx-auto py-8 px-[var(--container-pad)]">
-      <div className="mb-8">
-        <h1 className="font-h1 text-ink m-0 mb-3">All Sermons</h1>
-        <p className="font-body text-ink-muted m-0 max-w-[600px]">
+    <div style={{ maxWidth: 'var(--container-max)', margin: '0 auto', padding: 'var(--space-8) var(--container-pad)' }}>
+      <div style={{ marginBottom: 'var(--space-8)' }}>
+        <h1 style={{ font: 'var(--text-h1)', color: 'var(--color-ink)', margin: '0 0 12px' }}>All Sermons</h1>
+        <p style={{ font: 'var(--text-body)', color: 'var(--color-ink-muted)', margin: 0, maxWidth: 600 }}>
           Browse our entire library of teachings. Use the filters below to find exactly what you&apos;re looking for.
         </p>
       </div>
 
       {/* Filters Bar */}
-      <div className="flex gap-4 mb-8 flex-wrap">
-        <div className="flex-[1_1_300px]">
+      <div style={{ display: 'flex', gap: 16, marginBottom: 'var(--space-8)', flexWrap: 'wrap' }}>
+        <div style={{ flex: '1 1 300px' }}>
           <Input 
             value={search} 
             onChange={setSearch} 
             placeholder="Search by title, speaker, or topic..." 
           />
         </div>
-        <div className="w-[200px]">
+        <div style={{ width: 200 }}>
           <Select 
             value={speakerFilter} 
             onChange={setSpeakerFilter} 
@@ -96,14 +96,20 @@ function SermonsList() {
       </div>
 
       {loading ? (
-        <p className="font-body text-ink-muted">Loading sermons...</p>
+        <p style={{ font: 'var(--text-body)', color: 'var(--color-ink-muted)' }}>Loading sermons...</p>
       ) : filtered.length === 0 ? (
-        <div className="py-12 px-0 text-center bg-surface rounded-md border border-border">
-          <h3 className="font-h3 text-ink m-0 mb-2">No sermons found</h3>
-          <p className="font-body text-ink-muted m-0">Try adjusting your filters or search query.</p>
+        <div style={{ padding: 'var(--space-12) 0', textAlign: 'center', background: 'var(--color-surface)', borderRadius: 'var(--radius-md)', border: '1px solid var(--color-border)' }}>
+          <h3 style={{ font: 'var(--text-h3)', color: 'var(--color-ink)', margin: '0 0 8px' }}>No sermons found</h3>
+          <p style={{ font: 'var(--text-body)', color: 'var(--color-ink-muted)', margin: 0 }}>Try adjusting your filters or search query.</p>
         </div>
       ) : (
-        <div className="grid gap-6 grid-cols-[repeat(auto-fill,minmax(280px,1fr))]">
+        <div
+          style={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))',
+            gap: 'var(--space-6)',
+          }}
+        >
           {filtered.map((sermon) => (
             <SermonCard
               key={sermon.id}

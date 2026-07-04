@@ -31,6 +31,8 @@ export function SermonCard({
   href,
   priority = false,
 }: SermonCardProps) {
+  const [hover, setHover] = React.useState(false);
+  
   const Wrapper = href ? require('next/link').default : 'div';
   const wrapperProps = href 
     ? { href } 
@@ -45,37 +47,72 @@ export function SermonCard({
           onClick?.();
         }
       }}
-      className="group flex flex-col bg-surface rounded-md shadow-card hover:shadow-card-hover hover:-translate-y-[2px] transition-all duration-300 cursor-pointer overflow-hidden no-underline"
+      onMouseEnter={() => setHover(true)}
+      onMouseLeave={() => setHover(false)}
+      style={{
+        background: 'var(--color-surface)',
+        borderRadius: 'var(--radius-md)',
+        boxShadow: hover ? 'var(--shadow-card-hover)' : 'var(--shadow-card)',
+        transform: hover ? 'translateY(-2px)' : 'none',
+        transition: 'box-shadow var(--motion-base), transform var(--motion-base)',
+        cursor: 'pointer',
+        overflow: 'hidden',
+        display: 'flex',
+        flexDirection: 'column',
+        textDecoration: 'none',
+      }}
     >
-      <div className="w-full aspect-[3/4] relative bg-black/5 rounded-sm overflow-hidden">
+      <div
+        style={{
+          width: '100%',
+          aspectRatio: '3/4',
+          position: 'relative',
+          backgroundColor: 'var(--color-surface-hover)',
+          borderRadius: 'var(--radius-sm)',
+          overflow: 'hidden',
+        }}
+      >
         {thumbnail && !thumbnail.startsWith('#') && (
           <Image
             src={thumbnail}
             alt={title}
             fill
             sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-            className="object-cover"
+            style={{ objectFit: 'cover' }}
             priority={priority}
           />
         )}
       </div>
-      <div className="p-4">
+      <div style={{ padding: 'var(--space-4)' }}>
         {tags.length > 0 && (
-          <div className="flex gap-[6px] flex-wrap mb-2">
+          <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap', marginBottom: 8 }}>
             {tags.map((t) => (
               <span
                 key={t}
-                className="bg-primary-light text-primary-dark font-semibold text-[12px] leading-none font-body py-1 px-2 rounded-pill"
+                style={{
+                  background: 'var(--color-primary-light)',
+                  color: 'var(--color-primary-dark)',
+                  font: '600 12px/1 var(--font-body)',
+                  padding: '4px 8px',
+                  borderRadius: 'var(--radius-pill)',
+                }}
               >
                 {t}
               </span>
             ))}
           </div>
         )}
-        <div className="font-h3 text-ink group-hover:text-primary transition-colors duration-300 mb-1">
+        <div
+          style={{
+            font: 'var(--text-h3)',
+            color: hover ? 'var(--color-primary)' : 'var(--color-ink)',
+            transition: 'color var(--motion-base)',
+            marginBottom: 4,
+          }}
+        >
           {title}
         </div>
-        <div className="font-body-sm text-ink-muted">
+        <div style={{ font: 'var(--text-body-sm)', color: 'var(--color-ink-muted)' }}>
           {speaker} · {date}
           {duration ? ` · ${duration}` : ''}
         </div>

@@ -16,20 +16,31 @@ export interface IconButtonProps {
  * IconButton — icon-only control for compact toolbars, nav, and table row actions.
  */
 export function IconButton({ icon, size = 'nav', label, onClick, active = false }: IconButtonProps) {
-  const isInline = size === 'inline';
+  const [hover, setHover] = React.useState(false);
+  const px = SIZES[size] || SIZES.nav;
   return (
     <button
       type="button"
       aria-label={label}
       title={label}
       onClick={onClick}
-      className={`inline-flex items-center justify-center rounded-sm border-none cursor-pointer transition-colors duration-150 hover:bg-primary-light ${
-        isInline ? 'w-[36px] h-[36px]' : 'w-[40px] h-[40px]'
-      } ${active ? 'bg-primary-light text-primary-dark' : 'bg-transparent text-ink'}`}
+      onMouseEnter={() => setHover(true)}
+      onMouseLeave={() => setHover(false)}
+      style={{
+        width: px + 16,
+        height: px + 16,
+        display: 'inline-flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        borderRadius: 'var(--radius-sm)',
+        border: 'none',
+        background: active || hover ? 'var(--color-primary-light)' : 'transparent',
+        color: active ? 'var(--color-primary-dark)' : 'var(--color-ink)',
+        cursor: 'pointer',
+        transition: 'background var(--motion-fast), color var(--motion-fast)',
+      }}
     >
-      <span className={`inline-flex ${isInline ? 'w-[20px] h-[20px]' : 'w-[24px] h-[24px]'}`}>
-        {icon}
-      </span>
+      <span style={{ width: px, height: px, display: 'inline-flex' }}>{icon}</span>
     </button>
   );
 }

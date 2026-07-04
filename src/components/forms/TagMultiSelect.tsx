@@ -15,6 +15,7 @@ export interface TagMultiSelectProps {
  */
 export function TagMultiSelect({ value = [], onChange, placeholder = 'Add a tagâ€¦' }: TagMultiSelectProps) {
   const [draft, setDraft] = React.useState('');
+  const [focus, setFocus] = React.useState(false);
 
   function commit() {
     const v = draft.trim();
@@ -23,7 +24,20 @@ export function TagMultiSelect({ value = [], onChange, placeholder = 'Add a tagâ
   }
 
   return (
-    <div className="flex flex-wrap gap-[6px] items-center py-2 px-[10px] border border-border rounded-sm bg-surface focus-within:ring-2 focus-within:ring-primary focus-within:ring-offset-2 focus-within:border-primary">
+    <div
+      style={{
+        display: 'flex',
+        flexWrap: 'wrap',
+        gap: 6,
+        alignItems: 'center',
+        padding: '8px 10px',
+        border: `1px solid ${focus ? 'var(--color-primary)' : 'var(--color-border)'}`,
+        borderRadius: 'var(--radius-sm)',
+        background: 'var(--color-surface)',
+        outline: focus ? '2px solid var(--color-primary)' : 'none',
+        outlineOffset: 2,
+      }}
+    >
       {value.map((t) => (
         <Tag key={t} variant="topic" onRemove={() => onChange?.(value.filter((x) => x !== t))}>
           {t}
@@ -33,14 +47,26 @@ export function TagMultiSelect({ value = [], onChange, placeholder = 'Add a tagâ
         value={draft}
         placeholder={value.length === 0 ? placeholder : ''}
         onChange={(e) => setDraft(e.target.value)}
-        onBlur={commit}
+        onFocus={() => setFocus(true)}
+        onBlur={() => {
+          setFocus(false);
+          commit();
+        }}
         onKeyDown={(e) => {
           if (e.key === 'Enter' || e.key === ' ' || e.key === ',') {
             e.preventDefault();
             commit();
           }
         }}
-        className="border-none outline-none font-body text-ink flex-1 min-w-[100px] bg-transparent"
+        style={{
+          border: 'none',
+          outline: 'none',
+          font: 'var(--text-body)',
+          color: 'var(--color-ink)',
+          flex: 1,
+          minWidth: 100,
+          background: 'transparent',
+        }}
       />
     </div>
   );

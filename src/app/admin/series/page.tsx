@@ -153,9 +153,14 @@ export default function AdminSeriesPage() {
   }
 
   return (
-    <div className="max-w-[800px]">
-      <div className="responsive-header mb-8">
-        <h1 className="font-h1 text-ink m-0 mb-2">Series Manager</h1>
+    <div style={{ maxWidth: 800 }}>
+      <div
+        className="responsive-header"
+        style={{
+          marginBottom: 'var(--space-8)',
+        }}
+      >
+        <h1 style={{ font: 'var(--text-h1)', color: 'var(--color-ink)', margin: '0 0 8px' }}>Series Manager</h1>
         {!editingId && (
           <Button variant="primary" onClick={() => startEdit(null)}>
             <Plus width={16} height={16} style={{ marginRight: 6 }} />
@@ -165,11 +170,11 @@ export default function AdminSeriesPage() {
       </div>
 
       {editingId && (
-        <div className="bg-surface border border-border rounded-md p-6 mb-8">
-          <h2 className="font-h3 text-ink m-0 mb-4">
+        <div style={{ background: 'var(--color-surface)', border: '1px solid var(--color-border)', borderRadius: 'var(--radius-md)', padding: 'var(--space-6)', marginBottom: 'var(--space-8)' }}>
+          <h2 style={{ font: 'var(--text-h3)', color: 'var(--color-ink)', margin: '0 0 var(--space-4)' }}>
             {editingId === 'new' ? 'Create Series' : 'Edit Series'}
           </h2>
-          <form onSubmit={saveEdit} className="flex flex-col gap-4">
+          <form onSubmit={saveEdit} style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
             <FormField label="Title" htmlFor="title">
               <Input id="title" value={title} onChange={setTitle} />
             </FormField>
@@ -178,7 +183,17 @@ export default function AdminSeriesPage() {
                 id="description"
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
-                className="w-full min-h-[100px] py-2 px-3 rounded-sm border border-border bg-bg text-ink font-body resize-y"
+                style={{
+                  width: '100%',
+                  minHeight: 100,
+                  padding: '8px 12px',
+                  borderRadius: 'var(--radius-sm)',
+                  border: '1px solid var(--color-border)',
+                  background: 'var(--color-bg)',
+                  color: 'var(--color-ink)',
+                  font: 'var(--text-body)',
+                  resize: 'vertical',
+                }}
               />
             </FormField>
             <SupabaseImageUpload
@@ -187,30 +202,30 @@ export default function AdminSeriesPage() {
               onChange={setCoverImage}
               hint="Aspect ratio 3:4 recommended for series."
             />
-            <div className="flex gap-2">
+            <div style={{ display: 'flex', gap: 8 }}>
               <Button type="button" variant="secondary" onClick={cancelEdit}>Cancel</Button>
               <Button type="submit" variant="primary" loading={saving}>Save</Button>
             </div>
           </form>
 
           {editingId !== 'new' && (
-            <div className="mt-8 border-t border-border pt-6">
-              <h3 className="font-h3 text-ink mb-4">Sermons in this Series</h3>
+            <div style={{ marginTop: 'var(--space-8)', borderTop: '1px solid var(--color-border)', paddingTop: 'var(--space-6)' }}>
+              <h3 style={{ font: 'var(--text-h3)', color: 'var(--color-ink)', marginBottom: 'var(--space-4)' }}>Sermons in this Series</h3>
               {allContent.filter(c => c.kind === 'sermon' && c.series_id === editingId).length === 0 ? (
-                <p className="font-body text-ink-muted mb-4">No sermons attached yet.</p>
+                <p style={{ font: 'var(--text-body)', color: 'var(--color-ink-muted)', marginBottom: 'var(--space-4)' }}>No sermons attached yet.</p>
               ) : (
-                <ul className="list-none p-0 m-0 mb-4 flex flex-col gap-2">
+                <ul style={{ listStyle: 'none', padding: 0, margin: '0 0 var(--space-4)', display: 'flex', flexDirection: 'column', gap: 8 }}>
                   {allContent.filter(c => c.kind === 'sermon' && c.series_id === editingId).map(sermon => (
-                    <li key={sermon.id} className="flex justify-between items-center bg-bg py-2 px-3 rounded-sm">
-                      <span className="font-body text-ink">{sermon.title}</span>
-                      <button type="button" onClick={() => removeSermon(sermon.id)} disabled={managingSermons} className="bg-transparent border-none text-danger cursor-pointer font-semibold text-[12px] leading-none font-body hover:text-[#932F16] transition-colors disabled:opacity-50">Remove</button>
+                    <li key={sermon.id} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', background: 'var(--color-bg)', padding: '8px 12px', borderRadius: 'var(--radius-sm)' }}>
+                      <span style={{ font: 'var(--text-body)', color: 'var(--color-ink)' }}>{sermon.title}</span>
+                      <button type="button" onClick={() => removeSermon(sermon.id)} disabled={managingSermons} style={{ background: 'none', border: 'none', color: 'var(--color-danger)', cursor: 'pointer', font: '600 12px/1 var(--font-body)' }}>Remove</button>
                     </li>
                   ))}
                 </ul>
               )}
               
-              <div className="flex gap-2 items-end">
-                <div className="flex-1">
+              <div style={{ display: 'flex', gap: 8, alignItems: 'flex-end' }}>
+                <div style={{ flex: 1 }}>
                   <Select
                     value={selectedSermon}
                     onChange={setSelectedSermon}
@@ -230,9 +245,9 @@ export default function AdminSeriesPage() {
       )}
 
       {loading ? (
-        <p className="font-body text-ink-muted">Loading series...</p>
+        <p style={{ font: 'var(--text-body)', color: 'var(--color-ink-muted)' }}>Loading series...</p>
       ) : series.length === 0 ? (
-        <p className="font-body text-ink-muted">No series created yet.</p>
+        <p style={{ font: 'var(--text-body)', color: 'var(--color-ink-muted)' }}>No series created yet.</p>
       ) : (
         <AdminTable<Series>
           columns={[
@@ -241,11 +256,11 @@ export default function AdminSeriesPage() {
           ]}
           rows={series}
           renderActions={(s) => (
-            <div className="flex gap-2 justify-end">
-              <button onClick={() => startEdit(s)} className="bg-transparent border-none text-ink-muted cursor-pointer p-1 hover:text-ink transition-colors" title="Edit">
+            <div style={{ display: 'flex', gap: 8, justifyContent: 'flex-end' }}>
+              <button onClick={() => startEdit(s)} style={{ background: 'none', border: 'none', color: 'var(--color-ink-muted)', cursor: 'pointer', padding: 4 }} title="Edit">
                 <Edit2 width={16} height={16} />
               </button>
-              <button onClick={() => setSeriesToDelete(s.id)} className="bg-transparent border-none text-danger cursor-pointer p-1 hover:text-[#932F16] transition-colors" title="Delete">
+              <button onClick={() => setSeriesToDelete(s.id)} style={{ background: 'none', border: 'none', color: 'var(--color-danger)', cursor: 'pointer', padding: 4 }} title="Delete">
                 <Trash2 width={16} height={16} />
               </button>
             </div>

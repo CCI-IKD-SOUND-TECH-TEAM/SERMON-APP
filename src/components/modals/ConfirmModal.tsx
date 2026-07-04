@@ -25,20 +25,38 @@ export function ConfirmModal({
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/40 backdrop-blur-sm p-4">
+    <div style={{
+      position: 'fixed',
+      inset: 0,
+      zIndex: 9999,
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      background: 'rgba(0, 0, 0, 0.4)',
+      backdropFilter: 'blur(4px)',
+      padding: 'var(--space-4)',
+    }}>
       <div 
-        className="bg-surface w-full max-w-[400px] rounded-lg shadow-modal p-6 border border-border"
+        style={{
+          background: 'var(--color-surface)',
+          width: '100%',
+          maxWidth: 400,
+          borderRadius: 'var(--radius-lg)',
+          boxShadow: 'var(--shadow-modal)',
+          padding: 'var(--space-6)',
+          border: '1px solid var(--color-border)',
+        }}
         role="dialog"
         aria-modal="true"
         aria-labelledby="modal-title"
       >
-        <h2 id="modal-title" className="font-h3 text-ink mb-2">
+        <h2 id="modal-title" style={{ font: 'var(--text-h3)', color: 'var(--color-ink)', margin: '0 0 var(--space-2)' }}>
           {title}
         </h2>
-        <div className="font-body text-ink-muted mb-6">
+        <div style={{ font: 'var(--text-body)', color: 'var(--color-ink-muted)', marginBottom: 'var(--space-6)' }}>
           {message}
         </div>
-        <div className="flex gap-3 justify-end">
+        <div style={{ display: 'flex', gap: 12, justifyContent: 'flex-end' }}>
           <Button variant="secondary" onClick={onCancel} disabled={isLoading}>
             {cancelText}
           </Button>

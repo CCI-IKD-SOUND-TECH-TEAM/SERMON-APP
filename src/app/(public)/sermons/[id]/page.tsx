@@ -40,37 +40,56 @@ export default async function SermonDetailPage({ params }: { params: Promise<{ i
   const backLink = (
     <Link
       href="/"
-      className="text-ink-muted font-semibold text-[14px] leading-none font-body no-underline inline-flex items-center gap-[6px] mb-6 hover:text-ink transition-colors"
+      style={{
+        color: 'var(--color-ink-muted)',
+        font: '600 14px/1 var(--font-body)',
+        textDecoration: 'none',
+        display: 'inline-flex',
+        alignItems: 'center',
+        gap: 6,
+        marginBottom: 'var(--space-6)',
+      }}
     >
       <ChevronLeft width={16} height={16} /> Back to sermons
     </Link>
   );
 
   return (
-    <div className="max-w-[760px] mx-auto py-8 px-[var(--container-pad)]">
+    <div style={{ maxWidth: 760, margin: '0 auto', padding: 'var(--space-8) var(--container-pad)' }}>
       {backLink}
 
       {(!sermon || error) ? (
-        <p className="font-body text-ink-muted">
+        <p style={{ font: 'var(--text-body)', color: 'var(--color-ink-muted)' }}>
           That sermon couldn&apos;t be found. It may have been moved in Drive.
         </p>
       ) : (
         <>
-          <div className="aspect-[3/4] w-full max-w-[320px] relative bg-border rounded-md mb-6 overflow-hidden">
+          <div
+            style={{
+              aspectRatio: '3/4',
+              width: '100%',
+              maxWidth: '320px',
+              position: 'relative',
+              backgroundColor: 'var(--color-border)',
+              borderRadius: 'var(--radius-md)',
+              marginBottom: 'var(--space-6)',
+              overflow: 'hidden',
+            }}
+          >
             {sermon.thumbnail_url && !sermon.thumbnail_url.startsWith('#') && (
               <Image
                 src={sermon.thumbnail_url}
                 alt={sermon.title}
                 fill
                 sizes="(max-width: 768px) 100vw, 320px"
-                className="object-cover"
+                style={{ objectFit: 'cover' }}
                 priority
               />
             )}
           </div>
 
           {sermon.tags && sermon.tags.length > 0 && (
-            <div className="flex gap-1.5 mb-3 flex-wrap">
+            <div style={{ display: 'flex', gap: 6, marginBottom: 12, flexWrap: 'wrap' }}>
               {sermon.tags.map((t: string) => (
                 <Tag key={t} variant="topic">
                   {t}
@@ -79,12 +98,12 @@ export default async function SermonDetailPage({ params }: { params: Promise<{ i
             </div>
           )}
 
-          <h1 className="font-h1 text-ink m-0 mb-2">{sermon.title}</h1>
-          <div className="font-body-sm text-ink-muted mb-6">
+          <h1 style={{ font: 'var(--text-h1)', color: 'var(--color-ink)', margin: '0 0 8px' }}>{sermon.title}</h1>
+          <div style={{ font: 'var(--text-body-sm)', color: 'var(--color-ink-muted)', marginBottom: 'var(--space-6)' }}>
             {sermon.speaker} · {sermon.sermon_date}
           </div>
 
-          <div className="mb-8">
+          <div style={{ marginBottom: 'var(--space-8)' }}>
             <AudioPlayer
               title={sermon.title}
               speaker={sermon.speaker ?? 'Unknown Speaker'}
@@ -92,16 +111,21 @@ export default async function SermonDetailPage({ params }: { params: Promise<{ i
             />
           </div>
 
-          <div className="flex gap-3 mb-8">
+          <div style={{ display: 'flex', gap: 12, marginBottom: 'var(--space-8)' }}>
             <ShareButton
               title={sermon.title}
               text={`Listen to ${sermon.title} by ${sermon.speaker || 'our church'}`}
             />
           </div>
 
-          <h2 className="font-h2 text-ink m-0 mb-3">Notes</h2>
+          <h2 style={{ font: 'var(--text-h2)', color: 'var(--color-ink)', margin: '0 0 12px' }}>Notes</h2>
           <div
-            className="sermon-notes font-body text-ink max-w-[var(--measure)]"
+            className="sermon-notes"
+            style={{
+              font: 'var(--text-body)',
+              color: 'var(--color-ink)',
+              maxWidth: 'var(--measure)',
+            }}
             dangerouslySetInnerHTML={{
               __html: sermon.description
                 ? sanitizeHtml(sermon.description)

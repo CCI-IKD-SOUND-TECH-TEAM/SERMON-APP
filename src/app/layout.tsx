@@ -1,13 +1,14 @@
 import type { Metadata } from 'next';
-import { Inter, Fraunces } from 'next/font/google';
+import { Fraunces } from 'next/font/google';
 import '@/styles/globals.css';
 import '@/styles/tokens/colors.css';
 import '@/styles/tokens/typography.css';
 import '@/styles/tokens/spacing.css';
 import { AuthHashHandler } from '@/components/auth/AuthHashHandler';
+import { ThemeProvider } from '@/components/providers/ThemeProvider';
 
-const inter = Inter({ subsets: ['latin'], variable: '--font-body' });
-const fraunces = Fraunces({ subsets: ['latin'], variable: '--font-display' });
+const frauncesDisplay = Fraunces({ subsets: ['latin'], variable: '--font-display' });
+const frauncesBody = Fraunces({ subsets: ['latin'], variable: '--font-body' });
 
 export const metadata: Metadata = {
   title: {
@@ -24,10 +25,12 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body className={`${inter.variable} ${fraunces.variable}`}>
-        <AuthHashHandler />
-        {children}
+    <html lang="en" suppressHydrationWarning>
+      <body className={`${frauncesDisplay.variable} ${frauncesBody.variable}`}>
+        <ThemeProvider attribute="data-theme" defaultTheme="system" enableSystem>
+          <AuthHashHandler />
+          {children}
+        </ThemeProvider>
       </body>
     </html>
   );

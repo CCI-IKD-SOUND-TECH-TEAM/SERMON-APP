@@ -28,22 +28,29 @@ export function FilteredContent({ title, kind }: FilteredContentProps) {
 
   return (
     <div>
-      <div className="responsive-header mb-8">
+      <div className="responsive-header" style={{ marginBottom: 'var(--space-8)' }}>
         <div>
-          <h1 className="font-h1 text-ink m-0 mb-1">{title}</h1>
-          <div className="font-body text-ink-muted">
+          <h1 style={{ font: 'var(--text-h1)', color: 'var(--color-ink)', margin: '0 0 4px' }}>{title}</h1>
+          <div style={{ font: 'var(--text-body)', color: 'var(--color-ink-muted)' }}>
             {loaded ? `${rows.length} ${rows.length === 1 ? 'item' : 'items'}` : 'Loading…'}
           </div>
         </div>
         <a 
           href={`/admin/${kind}s/new`}
-          className="bg-primary text-surface py-2 px-4 rounded-sm no-underline font-semibold text-[14px] leading-none font-body hover:bg-primary-dark transition-colors"
+          style={{
+            background: 'var(--color-primary)',
+            color: 'var(--color-surface)',
+            padding: '8px 16px',
+            borderRadius: 'var(--radius-sm)',
+            textDecoration: 'none',
+            font: '600 14px/1 var(--font-body)',
+          }}
         >
           + New
         </a>
       </div>
       {rows.length === 0 && loaded ? (
-        <p className="font-body text-ink-muted">
+        <p style={{ font: 'var(--text-body)', color: 'var(--color-ink-muted)' }}>
           Nothing here yet — click &apos;New&apos; to get started.
         </p>
       ) : (

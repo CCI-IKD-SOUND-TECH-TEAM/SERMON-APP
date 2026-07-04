@@ -133,8 +133,8 @@ export default function EnrichImportPage({ params }: { params: Promise<{ id: str
       </Link>
 
       <div className="mb-8">
-        <h1 className="font-h1 text-ink m-0 mb-1">Review & Enrich</h1>
-        <div className="font-body text-ink-muted">
+        <h1 style={{ font: 'var(--text-h1)', color: 'var(--color-ink)', margin: '0 0 4px' }}>Review & Enrich</h1>
+        <div style={{ font: 'var(--text-body)', color: 'var(--color-ink-muted)' }}>
           File: <span className="font-semibold text-ink">{importRecord?.file_name}</span>
         </div>
       </div>

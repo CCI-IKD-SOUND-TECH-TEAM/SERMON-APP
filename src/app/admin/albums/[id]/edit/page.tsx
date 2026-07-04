@@ -57,7 +57,18 @@ export default function AlbumEditPage() {
   const backLink = (
     <button
       onClick={() => router.push('/admin')}
-      className="bg-transparent border-none text-ink-muted font-semibold text-[14px] leading-none font-body cursor-pointer flex items-center gap-[6px] mb-6 p-0 hover:text-ink transition-colors"
+      style={{
+        background: 'none',
+        border: 'none',
+        color: 'var(--color-ink-muted)',
+        font: '600 14px/1 var(--font-body)',
+        cursor: 'pointer',
+        display: 'flex',
+        alignItems: 'center',
+        gap: 6,
+        marginBottom: 'var(--space-6)',
+        padding: 0,
+      }}
     >
       <ChevronLeft width={16} height={16} /> Back to dashboard
     </button>
@@ -67,7 +78,7 @@ export default function AlbumEditPage() {
     return (
       <div>
         {backLink}
-        <p className="font-body text-ink-muted">Loading album…</p>
+        <p style={{ font: 'var(--text-body)', color: 'var(--color-ink-muted)' }}>Loading album…</p>
       </div>
     );
   }
@@ -76,7 +87,7 @@ export default function AlbumEditPage() {
     return (
       <div>
         {backLink}
-        <p className="font-body text-ink-muted">
+        <p style={{ font: 'var(--text-body)', color: 'var(--color-ink-muted)' }}>
           That album couldn&apos;t be found. It may have been moved in Drive.
         </p>
       </div>
@@ -87,12 +98,17 @@ export default function AlbumEditPage() {
     <div>
       {backLink}
 
-      <div className="responsive-header mb-8">
+      <div
+        className="responsive-header"
+        style={{
+          marginBottom: 'var(--space-8)',
+        }}
+      >
         <div>
-          <h1 className="font-h1 text-ink m-0 mb-2">Edit album</h1>
+          <h1 style={{ font: 'var(--text-h1)', color: 'var(--color-ink)', margin: '0 0 8px' }}>Edit album</h1>
           <Badge status={status} />
         </div>
-        <div className="flex gap-2">
+        <div style={{ display: 'flex', gap: 8 }}>
           <Button variant="secondary" loading={saving === 'draft'} onClick={() => save('pending_review', 'draft')}>
             Save draft
           </Button>
@@ -102,7 +118,7 @@ export default function AlbumEditPage() {
         </div>
       </div>
 
-      <div className="max-w-[640px]">
+      <div style={{ maxWidth: 640 }}>
         <FormField label="Album title" htmlFor="title" hint="Parsed from Drive folder name">
           <Input id="title" value={title} onChange={setTitle} />
         </FormField>
@@ -111,15 +127,15 @@ export default function AlbumEditPage() {
         </FormField>
 
         {album.photos && album.photos.length > 0 && (
-          <div className="mt-8">
-            <h3 className="font-h3 text-ink mb-4">Photos ({album.photos.length})</h3>
-            <div className="grid gap-2 grid-cols-[repeat(auto-fill,minmax(120px,1fr))]">
+          <div style={{ marginTop: 'var(--space-8)' }}>
+            <h3 style={{ font: 'var(--text-h3)', color: 'var(--color-ink)', marginBottom: 'var(--space-4)' }}>Photos ({album.photos.length})</h3>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(120px, 1fr))', gap: 8 }}>
               {album.photos.slice(0, 12).map((p) => (
-                <div key={p.id} className="aspect-square rounded-sm" style={{ background: p.thumbnail_url ? `url(${p.thumbnail_url}) center/cover` : 'var(--color-border)' }} />
+                <div key={p.id} style={{ aspectRatio: '1', background: p.thumbnail_url ? `url(${p.thumbnail_url}) center/cover` : 'var(--color-border)', borderRadius: 'var(--radius-sm)' }} />
               ))}
             </div>
             {album.photos.length > 12 && (
-              <p className="font-body-sm text-ink-muted mt-2">
+              <p style={{ font: 'var(--text-body-sm)', color: 'var(--color-ink-muted)', marginTop: 8 }}>
                 + {album.photos.length - 12} more
               </p>
             )}

@@ -11,7 +11,8 @@ export interface InputProps extends Omit<React.InputHTMLAttributes<HTMLInputElem
  * Input — text input with label-above pattern, border, and accessible focus ring.
  * Typically wrapped by FormField for label/hint/auto-filled affordances.
  */
-export function Input({ value, onChange, placeholder, type = 'text', disabled = false, id, className, ...rest }: InputProps) {
+export function Input({ value, onChange, placeholder, type = 'text', disabled = false, id }: InputProps) {
+  const [focus, setFocus] = React.useState(false);
   return (
     <input
       id={id}
@@ -20,8 +21,21 @@ export function Input({ value, onChange, placeholder, type = 'text', disabled = 
       placeholder={placeholder}
       disabled={disabled}
       onChange={(e) => onChange?.(e.target.value)}
-      className={`w-full box-border font-body text-ink border border-border rounded-sm py-[10px] px-3 outline-none focus:border-primary focus:ring-2 focus:ring-primary focus:ring-offset-2 transition-colors duration-150 ${disabled ? 'bg-bg' : 'bg-surface'} ${className || ''}`}
-      {...rest}
+      onFocus={() => setFocus(true)}
+      onBlur={() => setFocus(false)}
+      style={{
+        width: '100%',
+        boxSizing: 'border-box',
+        font: 'var(--text-body)',
+        color: 'var(--color-ink)',
+        background: disabled ? 'var(--color-bg)' : 'var(--color-surface)',
+        border: `1px solid ${focus ? 'var(--color-primary)' : 'var(--color-border)'}`,
+        borderRadius: 'var(--radius-sm)',
+        padding: '10px 12px',
+        outline: focus ? '2px solid var(--color-primary)' : 'none',
+        outlineOffset: 2,
+        transition: 'border-color var(--motion-fast)',
+      }}
     />
   );
 }

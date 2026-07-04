@@ -19,10 +19,9 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
     <div className="flex bg-bg min-h-screen">
       <AdminSidebar active={activeKey(pathname)} />
       <main className="flex-1 min-w-0 p-8 max-md:pt-[calc(56px+var(--space-8))]">
-          <Toaster position="top-right" richColors />
-          {children}
-        </main>
-        </main>
+        <Toaster position="top-right" richColors />
+        {children}
+      </main>
     </div>
   );
 }

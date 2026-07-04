@@ -20,7 +20,13 @@ export interface PhotoGridProps {
  */
 export function PhotoGrid({ photos = [], onSelect }: PhotoGridProps) {
   return (
-    <div className="grid gap-3 grid-cols-[repeat(auto-fill,minmax(140px,1fr))]">
+    <div
+      style={{
+        display: 'grid',
+        gridTemplateColumns: 'repeat(auto-fill, minmax(140px, 1fr))',
+        gap: 'var(--space-3)',
+      }}
+    >
       {photos.map((p, i) => {
         const bg = p.src ? `url(${p.src}) center/cover` : p.color || 'var(--color-accent-light)';
         return (
@@ -36,8 +42,12 @@ export function PhotoGrid({ photos = [], onSelect }: PhotoGridProps) {
                 onSelect?.(i);
               }
             }}
-            className="aspect-square rounded-sm cursor-pointer hover:opacity-90 transition-opacity"
-            style={{ background: bg }}
+            style={{
+              aspectRatio: '1/1',
+              borderRadius: 'var(--radius-sm)',
+              background: bg,
+              cursor: 'pointer',
+            }}
           />
         );
       })}

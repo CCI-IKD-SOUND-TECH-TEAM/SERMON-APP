@@ -9,14 +9,14 @@ export interface AlbumCardProps {
   photoCount: number;
   cover?: string;
   onClick?: () => void;
-  priority?: boolean;
 }
 
 /**
  * AlbumCard — photo album card for the public gallery. 4:3 cover, title,
  * date · photo count meta line. Same interaction pattern as SermonCard.
  */
-export function AlbumCard({ title, date, photoCount, cover, onClick, priority = false }: AlbumCardProps) {
+export function AlbumCard({ title, date, photoCount, cover, onClick }: AlbumCardProps) {
+  const [hover, setHover] = React.useState(false);
   return (
     <div
       role="button"
@@ -28,25 +28,48 @@ export function AlbumCard({ title, date, photoCount, cover, onClick, priority = 
           onClick?.();
         }
       }}
-      className="group bg-surface rounded-md shadow-card hover:shadow-card-hover hover:-translate-y-[2px] transition-all duration-300 cursor-pointer overflow-hidden"
+      onMouseEnter={() => setHover(true)}
+      onMouseLeave={() => setHover(false)}
+      style={{
+        background: 'var(--color-surface)',
+        borderRadius: 'var(--radius-md)',
+        boxShadow: hover ? 'var(--shadow-card-hover)' : 'var(--shadow-card)',
+        transform: hover ? 'translateY(-2px)' : 'none',
+        transition: 'box-shadow var(--motion-base), transform var(--motion-base)',
+        cursor: 'pointer',
+        overflow: 'hidden',
+      }}
     >
-      <div className="w-full aspect-[3/4] relative bg-black/5">
+      <div
+        style={{
+          width: '100%',
+          aspectRatio: '3/4',
+          position: 'relative',
+          backgroundColor: 'var(--color-surface-hover)',
+        }}
+      >
         {cover && !cover.startsWith('#') && (
           <Image
             src={cover}
             alt={title}
             fill
             sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-            className="object-cover"
-            priority={priority}
+            style={{ objectFit: 'cover' }}
           />
         )}
       </div>
-      <div className="p-4">
-        <div className="font-h3 text-ink group-hover:text-primary transition-colors duration-300 mb-1">
+      <div style={{ padding: 'var(--space-4)' }}>
+        <div
+          style={{
+            font: 'var(--text-h3)',
+            color: hover ? 'var(--color-primary)' : 'var(--color-ink)',
+            transition: 'color var(--motion-base)',
+            marginBottom: 4,
+          }}
+        >
           {title}
         </div>
-        <div className="font-body-sm text-ink-muted">
+        <div style={{ font: 'var(--text-body-sm)', color: 'var(--color-ink-muted)' }}>
           {date} · {photoCount} photos
         </div>
       </div>

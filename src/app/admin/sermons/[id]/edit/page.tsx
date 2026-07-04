@@ -71,7 +71,18 @@ export default function SermonEditorPage() {
   const backLink = (
     <button
       onClick={() => router.push('/admin')}
-      className="bg-transparent border-none text-ink-muted font-semibold text-[14px] leading-none font-body cursor-pointer flex items-center gap-[6px] mb-6 p-0 hover:text-ink transition-colors"
+      style={{
+        background: 'none',
+        border: 'none',
+        color: 'var(--color-ink-muted)',
+        font: '600 14px/1 var(--font-body)',
+        cursor: 'pointer',
+        display: 'flex',
+        alignItems: 'center',
+        gap: 6,
+        marginBottom: 'var(--space-6)',
+        padding: 0,
+      }}
     >
       <ChevronLeft width={16} height={16} /> Back to dashboard
     </button>
@@ -81,7 +92,7 @@ export default function SermonEditorPage() {
     return (
       <div>
         {backLink}
-        <p className="font-body text-ink-muted">Loading sermon…</p>
+        <p style={{ font: 'var(--text-body)', color: 'var(--color-ink-muted)' }}>Loading sermon…</p>
       </div>
     );
   }
@@ -90,7 +101,7 @@ export default function SermonEditorPage() {
     return (
       <div>
         {backLink}
-        <p className="font-body text-ink-muted">
+        <p style={{ font: 'var(--text-body)', color: 'var(--color-ink-muted)' }}>
           That sermon couldn&apos;t be found. It may have been moved in Drive.
         </p>
       </div>
@@ -101,12 +112,17 @@ export default function SermonEditorPage() {
     <div>
       {backLink}
 
-      <div className="responsive-header mb-8">
+      <div
+        className="responsive-header"
+        style={{
+          marginBottom: 'var(--space-8)',
+        }}
+      >
         <div>
-          <h1 className="font-h1 text-ink m-0 mb-2">Edit sermon</h1>
+          <h1 style={{ font: 'var(--text-h1)', color: 'var(--color-ink)', margin: '0 0 8px' }}>Edit sermon</h1>
           <Badge status={status} />
         </div>
-        <div className="flex gap-2">
+        <div style={{ display: 'flex', gap: 8 }}>
           <Button variant="secondary" loading={saving === 'draft'} onClick={() => save('pending_review', 'draft')}>
             Save draft
           </Button>
@@ -116,7 +132,7 @@ export default function SermonEditorPage() {
         </div>
       </div>
 
-      <div className="max-w-[460px]">
+      <div style={{ maxWidth: 460 }}>
         <ImageUpload label="Cover Image" value={thumbnailUrl} onChange={setThumbnailUrl} hint="Aspect ratio 3:4 recommended." />
         <FormField label="Title" htmlFor="title">
           <Input id="title" value={title} onChange={setTitle} />

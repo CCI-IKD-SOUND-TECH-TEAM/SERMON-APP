@@ -38,7 +38,15 @@ export default async function SeriesDetailPage({ params }: { params: Promise<{ i
   const backLink = (
     <Link
       href="/series"
-      className="text-ink-muted font-semibold text-[14px] leading-none font-body no-underline inline-flex items-center gap-[6px] mb-6 hover:text-ink transition-colors"
+      style={{
+        color: 'var(--color-ink-muted)',
+        font: '600 14px/1 var(--font-body)',
+        textDecoration: 'none',
+        display: 'inline-flex',
+        alignItems: 'center',
+        gap: 6,
+        marginBottom: 'var(--space-6)',
+      }}
     >
       <ChevronLeft width={16} height={16} /> Back to all series
     </Link>
@@ -47,28 +55,32 @@ export default async function SeriesDetailPage({ params }: { params: Promise<{ i
   const publishedSermons = (series?.sermons || []).filter((s: Sermon) => s.status === 'published');
 
   return (
-    <div className="max-w-[var(--container-max)] mx-auto py-8 px-[var(--container-pad)]">
+    <div style={{ maxWidth: 'var(--container-max)', margin: '0 auto', padding: 'var(--space-8) var(--container-pad)' }}>
       {backLink}
 
       {(!series || error) ? (
-        <p className="font-body text-ink-muted">
+        <p style={{ font: 'var(--text-body)', color: 'var(--color-ink-muted)' }}>
           That series couldn&apos;t be found.
         </p>
       ) : (
         <>
           <div
-            className="aspect-[3/4] w-full max-w-[320px] rounded-md mb-6"
             style={{
+              aspectRatio: '3/4',
+              width: '100%',
+              maxWidth: 320,
               background: series.cover_image_url ? `url(${series.cover_image_url}) center/cover` : 'var(--color-border)',
+              borderRadius: 'var(--radius-md)',
+              marginBottom: 'var(--space-6)',
             }}
           />
 
-          <h1 className="font-h1 text-ink m-0 mb-2">{series.title}</h1>
-          <div className="font-body text-ink-muted mb-6 max-w-[600px]">
+          <h1 style={{ font: 'var(--text-h1)', color: 'var(--color-ink)', margin: '0 0 8px' }}>{series.title}</h1>
+          <div style={{ font: 'var(--text-body)', color: 'var(--color-ink-muted)', marginBottom: 'var(--space-6)', maxWidth: 600 }}>
             {series.description || 'No description provided.'}
           </div>
 
-          <div className="flex gap-3 mb-8">
+          <div style={{ display: 'flex', gap: 12, marginBottom: 'var(--space-8)' }}>
             <ShareButton
               title={series.title}
               text={`Explore sermons in the ${series.title} series`}
@@ -76,14 +88,20 @@ export default async function SeriesDetailPage({ params }: { params: Promise<{ i
             />
           </div>
 
-          <h2 className="font-h2 text-ink m-0 mb-4">
+          <h2 style={{ font: 'var(--text-h2)', color: 'var(--color-ink)', margin: '0 0 16px' }}>
             Sermons in this series ({publishedSermons.length})
           </h2>
 
           {publishedSermons.length === 0 ? (
-            <p className="font-body text-ink-muted">No sermons have been published in this series yet.</p>
+            <p style={{ font: 'var(--text-body)', color: 'var(--color-ink-muted)' }}>No sermons have been published in this series yet.</p>
           ) : (
-            <div className="grid gap-6 grid-cols-[repeat(auto-fill,minmax(280px,1fr))]">
+            <div
+              style={{
+                display: 'grid',
+                gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))',
+                gap: 'var(--space-6)',
+              }}
+            >
               {publishedSermons.map((sermon: Sermon) => (
                 <SermonCard
                   key={sermon.id}

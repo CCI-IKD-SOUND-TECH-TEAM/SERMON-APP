@@ -14,9 +14,16 @@ export function Tag({ variant = 'topic', children, onRemove }: TagProps) {
   const isTopic = variant === 'topic';
   return (
     <span
-      className={`inline-flex items-center gap-[6px] py-[5px] px-[10px] rounded-pill font-semibold text-[13px] leading-none font-body ${
-        isTopic ? 'bg-primary-light text-primary-dark' : 'bg-accent-light text-accent-dark'
-      }`}
+      style={{
+        display: 'inline-flex',
+        alignItems: 'center',
+        gap: 6,
+        background: isTopic ? 'var(--color-primary-light)' : 'var(--color-accent-light)',
+        color: isTopic ? 'var(--color-primary-dark)' : 'var(--color-accent-dark)',
+        font: '600 13px/1 var(--font-body)',
+        padding: '5px 10px',
+        borderRadius: 'var(--radius-pill)',
+      }}
     >
       {children}
       {onRemove && (
@@ -24,7 +31,15 @@ export function Tag({ variant = 'topic', children, onRemove }: TagProps) {
           type="button"
           onClick={onRemove}
           aria-label={`Remove ${typeof children === 'string' ? children : 'tag'}`}
-          className="border-none bg-transparent text-inherit cursor-pointer p-0 inline-flex opacity-70 hover:opacity-100"
+          style={{
+            border: 'none',
+            background: 'transparent',
+            color: 'inherit',
+            cursor: 'pointer',
+            padding: 0,
+            display: 'inline-flex',
+            opacity: 0.7,
+          }}
         >
           <X width={12} height={12} />
         </button>

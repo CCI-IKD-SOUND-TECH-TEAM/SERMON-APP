@@ -25,27 +25,27 @@ export default function DashboardPage() {
 
   return (
     <div>
-      <h1 className="font-h1 text-ink m-0 mb-1">Dashboard</h1>
-      <div className="font-body text-ink-muted mb-8">
+      <h1 style={{ font: 'var(--text-h1)', color: 'var(--color-ink)', margin: '0 0 4px' }}>Dashboard</h1>
+      <div style={{ font: 'var(--text-body)', color: 'var(--color-ink-muted)', marginBottom: 'var(--space-8)' }}>
         Manage your sermons and photo albums.
       </div>
 
-      <div className="flex gap-6 mb-12 flex-wrap">
-        <div className="flex-1 min-w-[200px] bg-surface border border-border rounded-md p-6">
-          <div className="flex items-center gap-2 text-ink-muted mb-2 font-semibold text-[13px] leading-none font-body">
+      <div style={{ display: 'flex', gap: 'var(--space-6)', marginBottom: 'var(--space-12)', flexWrap: 'wrap' }}>
+        <div style={{ flex: 1, minWidth: 200, background: 'var(--color-surface)', border: '1px solid var(--color-border)', borderRadius: 'var(--radius-md)', padding: 'var(--space-6)' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 8, color: 'var(--color-ink-muted)', marginBottom: 8, font: '600 13px/1 var(--font-body)' }}>
             <Film width={16} height={16} /> Total Sermons
           </div>
-          <div className="font-hero text-ink">{stats?.sermons ?? '...'}</div>
+          <div style={{ font: 'var(--text-hero)', color: 'var(--color-ink)' }}>{stats?.sermons ?? '...'}</div>
         </div>
-        <div className="flex-1 min-w-[200px] bg-surface border border-border rounded-md p-6">
-          <div className="flex items-center gap-2 text-ink-muted mb-2 font-semibold text-[13px] leading-none font-body">
+        <div style={{ flex: 1, minWidth: 200, background: 'var(--color-surface)', border: '1px solid var(--color-border)', borderRadius: 'var(--radius-md)', padding: 'var(--space-6)' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 8, color: 'var(--color-ink-muted)', marginBottom: 8, font: '600 13px/1 var(--font-body)' }}>
             <ImageIcon width={16} height={16} /> Photo Albums
           </div>
-          <div className="font-hero text-ink">{stats?.albums ?? '...'}</div>
+          <div style={{ font: 'var(--text-hero)', color: 'var(--color-ink)' }}>{stats?.albums ?? '...'}</div>
         </div>
       </div>
 
-      <h2 className="font-h2 text-ink m-0 mb-3">All content</h2>
+      <h2 style={{ font: 'var(--text-h2)', color: 'var(--color-ink)', margin: '0 0 12px' }}>All content</h2>
       <ContentTable rows={all} onChanged={refresh} />
     </div>
   );
