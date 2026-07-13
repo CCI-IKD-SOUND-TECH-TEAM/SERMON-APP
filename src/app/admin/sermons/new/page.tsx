@@ -18,6 +18,7 @@ export default function NewSermonPage() {
 
   const [title, setTitle] = React.useState('');
   const [speaker, setSpeaker] = React.useState('');
+  const [sermonDate, setSermonDate] = React.useState(new Date().toISOString().split('T')[0]);
   const [series, setSeries] = React.useState('none');
   const [seriesOptions, setSeriesOptions] = React.useState<{value: string, label: string}[]>([{ value: 'none', label: 'No series' }]);
   const [tags, setTags] = React.useState<string[]>([]);
@@ -52,7 +53,7 @@ export default function NewSermonPage() {
         series_id: series === 'none' ? null : series,
         tags,
         status: nextStatus,
-        sermon_date: new Date().toISOString().split('T')[0],
+        sermon_date: sermonDate || new Date().toISOString().split('T')[0],
         thumbnail_url: thumbnailUrl || null,
       });
 
@@ -157,6 +158,9 @@ export default function NewSermonPage() {
         </FormField>
         <FormField label="Speaker">
           <Input value={speaker} onChange={setSpeaker} />
+        </FormField>
+        <FormField label="Date Preached">
+          <Input type="date" value={sermonDate} onChange={setSermonDate} />
         </FormField>
         <FormField label="Series">
           <Select value={series} onChange={setSeries} options={seriesOptions} />

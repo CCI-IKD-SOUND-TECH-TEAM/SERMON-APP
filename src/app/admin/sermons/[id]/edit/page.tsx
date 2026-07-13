@@ -19,6 +19,7 @@ export default function SermonEditorPage() {
   const [sermon, setSermon] = React.useState<Sermon | null | 'missing'>(null);
   const [title, setTitle] = React.useState('');
   const [speaker, setSpeaker] = React.useState('');
+  const [sermonDate, setSermonDate] = React.useState('');
   const [series, setSeries] = React.useState('none');
   const [seriesOptions, setSeriesOptions] = React.useState<{value: string, label: string}[]>([{ value: 'none', label: 'No series' }]);
   const [tags, setTags] = React.useState<string[]>([]);
@@ -35,6 +36,7 @@ export default function SermonEditorPage() {
         setSermon(s);
         setTitle(s.title);
         setSpeaker(s.speaker ?? '');
+        setSermonDate(s.sermon_date ?? '');
         setSeries(s.series_id ?? 'none');
         setTags(s.tags ?? []);
         setStatus(s.status);
@@ -57,6 +59,7 @@ export default function SermonEditorPage() {
       await api.updateSermon(params.id, {
         title,
         speaker,
+        sermon_date: sermonDate || null,
         series_id: series === 'none' ? null : series,
         tags,
         status: nextStatus,
@@ -139,6 +142,9 @@ export default function SermonEditorPage() {
         </FormField>
         <FormField label="Speaker" autoFilled hint="Detected from the Drive filename.">
           <Input value={speaker} onChange={setSpeaker} />
+        </FormField>
+        <FormField label="Date Preached">
+          <Input type="date" value={sermonDate} onChange={setSermonDate} />
         </FormField>
         <FormField label="Series">
           <Select value={series} onChange={setSeries} options={seriesOptions} />
