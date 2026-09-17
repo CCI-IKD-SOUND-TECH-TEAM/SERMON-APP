@@ -2,7 +2,7 @@ import React from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { ChevronLeft } from 'lucide-react';
-import { AudioPlayer } from '@/components/media/AudioPlayer';
+import { SermonPlayButton } from '@/components/media/SermonPlayButton';
 import { Tag } from '@/components/data-display/Tag';
 import { ShareButton } from '@/components/actions/ShareButton';
 import { createClient } from '@/lib/supabase/server';
@@ -35,7 +35,7 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
 export default async function SermonDetailPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
   const supabase = await createClient();
-  const { data: sermon, error } = await supabase.from('sermons').select('*').eq('id', id).single();
+  const { data: sermon, error } = await supabase.from('sermons').select('*, series(title)').eq('id', id).single();
 
   const backLink = (
     <Link
@@ -103,11 +103,21 @@ export default async function SermonDetailPage({ params }: { params: Promise<{ i
             {sermon.speaker} · {sermon.sermon_date}
           </div>
 
-          <div style={{ marginBottom: 'var(--space-8)' }}>
-            <AudioPlayer
-              title={sermon.title}
-              speaker={sermon.speaker ?? 'Unknown Speaker'}
-              src={sermon.drive_file_id ? `/api/media/stream/${sermon.drive_file_id}` : undefined}
+          <div style={{ marginBottom: 'var(--space-6)' }}>
+            <SermonPlayButton
+              track={{
+                id: sermon.id,
+                title: sermon.title,
+                speaker: sermon.speaker,
+                coverUrl: sermon.thumbnail_url && !sermon.thumbnail_url.startsWith('#') ? sermon.thumbnail_url : null,
+                src: sermon.drive_file_id ? `/api/media/stream/${sermon.drive_file_id}` : '',
+                seriesId: sermon.series_id,
+                seriesTitle: sermon.series?.title ?? null,
+                description: sermon.description,
+                date: sermon.sermon_date,
+                tags: sermon.tags,
+              }}
+              downloadUrl={sermon.drive_file_id ? `/api/media/stream/${sermon.drive_file_id}` : undefined}
             />
           </div>
 

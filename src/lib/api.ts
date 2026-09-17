@@ -78,11 +78,27 @@ export const api = {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ role }),
     }).then(r => json<import('./types').Profile>(r)),
+  setUserActive: (id: string, active: boolean) =>
+    fetch(`/api/admin/users/${id}`, {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ active }),
+    }).then(r => json<import('./types').Profile>(r)),
   deleteUser: (id: string) =>
     fetch(`/api/admin/users/${id}`, { method: 'DELETE' }).then(r => json<{ ok: true }>(r)),
 
   content: () => fetch('/api/admin/content').then((r) => json<ContentRow[]>(r)),
   stats: () => fetch('/api/admin/stats').then((r) => json<{ sermons: number, albums: number }>(r)),
+  analytics: () =>
+    fetch('/api/admin/analytics').then((r) =>
+      json<{
+        totalPlays: number;
+        playsLast7d: number;
+        playsLast30d: number;
+        mostPlayed: { id: string; title: string; speaker: string | null; thumbnail_url: string | null; plays: number }[];
+        dailyTrend: { date: string; plays: number }[];
+      }>(r)
+    ),
   setStatus: (kind: ContentRow['kind'], id: string, status: ContentRow['status']) =>
     fetch('/api/admin/status', {
       method: 'PATCH',

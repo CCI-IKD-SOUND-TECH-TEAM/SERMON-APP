@@ -8,7 +8,7 @@ import { FormField } from '@/components/forms/FormField';
 import { Input } from '@/components/forms/Input';
 import { Select } from '@/components/forms/Select';
 import { ConfirmModal } from '@/components/modals/ConfirmModal';
-import { Trash2, Plus, Mail } from 'lucide-react';
+import { Trash2, Plus, Mail, UserX, UserCheck } from 'lucide-react';
 import { AdminTable } from '@/components/admin/AdminTable';
 import { toast } from 'sonner';
 
@@ -23,6 +23,7 @@ export default function AdminUsersPage() {
   const [inviteLoading, setInviteLoading] = React.useState(false);
   const [userToDelete, setUserToDelete] = React.useState<string | null>(null);
   const [deleteLoading, setDeleteLoading] = React.useState(false);
+  const [togglingId, setTogglingId] = React.useState<string | null>(null);
 
   const loadUsers = React.useCallback(async () => {
     setLoading(true);
@@ -65,6 +66,24 @@ export default function AdminUsersPage() {
       toast.success('Role updated');
     } catch (err: any) {
       toast.error(err.message || 'Failed to update role');
+    }
+  }
+
+  function isActive(u: Profile) {
+    return !u.banned_until || new Date(u.banned_until).getTime() <= Date.now();
+  }
+
+  async function handleToggleActive(u: Profile) {
+    const nextActive = !isActive(u);
+    setTogglingId(u.id);
+    try {
+      await api.setUserActive(u.id, nextActive);
+      setUsers(users.map((x) => (x.id === u.id ? { ...x, banned_until: nextActive ? null : '9999-01-01T00:00:00Z' } : x)));
+      toast.success(nextActive ? 'User reactivated' : 'User deactivated');
+    } catch (err: any) {
+      toast.error(err.message || 'Failed to update user');
+    } finally {
+      setTogglingId(null);
     }
   }
 
@@ -174,7 +193,26 @@ export default function AdminUsersPage() {
               label: 'User',
               render: (u) => (
                 <div>
-                  <div style={{ fontWeight: 600 }}>{u.full_name || 'No name set'}</div>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                    <span style={{ fontWeight: 600 }}>{u.full_name || 'No name set'}</span>
+                    {!isActive(u) && (
+                      <span
+                        style={{
+                          display: 'inline-flex',
+                          alignItems: 'center',
+                          gap: 6,
+                          background: 'var(--color-danger-bg)',
+                          color: 'var(--color-danger)',
+                          font: '600 12px/1 var(--font-body)',
+                          padding: '4px 8px',
+                          borderRadius: 'var(--radius-pill)',
+                        }}
+                      >
+                        <span style={{ width: 6, height: 6, borderRadius: '50%', background: 'currentColor' }} />
+                        Deactivated
+                      </span>
+                    )}
+                  </div>
                   <div style={{ color: 'var(--color-ink-muted)', fontSize: 13, marginTop: 4 }}>{u.email || 'Unknown email'}</div>
                 </div>
               ),
@@ -204,9 +242,25 @@ export default function AdminUsersPage() {
           ]}
           rows={users}
           renderActions={(u) => (
-            <button onClick={() => setUserToDelete(u.id)} style={{ background: 'none', border: 'none', color: 'var(--color-danger)', cursor: 'pointer', padding: 4 }} title="Delete user">
-              <Trash2 width={16} height={16} />
-            </button>
+            <div style={{ display: 'flex', gap: 4 }}>
+              <button
+                onClick={() => handleToggleActive(u)}
+                disabled={togglingId === u.id}
+                style={{
+                  background: 'none',
+                  border: 'none',
+                  color: isActive(u) ? 'var(--color-ink-muted)' : 'var(--color-success)',
+                  cursor: togglingId === u.id ? 'wait' : 'pointer',
+                  padding: 4,
+                }}
+                title={isActive(u) ? 'Deactivate user' : 'Reactivate user'}
+              >
+                {isActive(u) ? <UserX width={16} height={16} /> : <UserCheck width={16} height={16} />}
+              </button>
+              <button onClick={() => setUserToDelete(u.id)} style={{ background: 'none', border: 'none', color: 'var(--color-danger)', cursor: 'pointer', padding: 4 }} title="Delete user">
+                <Trash2 width={16} height={16} />
+              </button>
+            </div>
           )}
         />
       )}
