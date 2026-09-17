@@ -26,7 +26,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={`${frauncesDisplay.variable} ${frauncesBody.variable}`}>
+      <body className={`${frauncesDisplay.variable} ${frauncesBody.variable}`} suppressHydrationWarning>
         <ThemeProvider attribute="data-theme" defaultTheme="system" enableSystem>
           <AuthHashHandler />
           {children}

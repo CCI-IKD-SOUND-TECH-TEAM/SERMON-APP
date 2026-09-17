@@ -3,6 +3,8 @@
 import React from 'react';
 import { usePathname } from 'next/navigation';
 import { PublicNav } from '@/components/navigation/PublicNav';
+import { PlayerProvider } from '@/lib/player/PlayerContext';
+import { MiniPlayerBar } from '@/components/media/MiniPlayerBar';
 
 
 const LINKS = [
@@ -21,6 +23,7 @@ export default function PublicLayout({ children }: { children: React.ReactNode }
         : 'Sermons';
 
   return (
+    <PlayerProvider>
     <div style={{ display: 'flex', flexDirection: 'column', background: 'var(--color-bg)', minHeight: '100vh' }}>
       <PublicNav links={LINKS} active={active} />
       
@@ -94,6 +97,9 @@ export default function PublicLayout({ children }: { children: React.ReactNode }
           </div>
         </div>
       </footer>
+
+      <MiniPlayerBar />
     </div>
+    </PlayerProvider>
   );
 }

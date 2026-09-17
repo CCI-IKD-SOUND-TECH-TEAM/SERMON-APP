@@ -16,9 +16,25 @@ export async function PATCH(
   }
 
   const body = await request.json();
-  
-  if (user.id === id && body.role !== 'admin') {
+
+  if (user.id === id && body.role !== undefined && body.role !== 'admin') {
     return NextResponse.json({ error: 'Cannot downgrade your own account' }, { status: 400 });
+  }
+  if (user.id === id && body.active === false) {
+    return NextResponse.json({ error: 'Cannot deactivate your own account' }, { status: 400 });
+  }
+
+  if (typeof body.active === 'boolean') {
+    const admin = createAdminClient();
+    const { error: banError } = await admin.auth.admin.updateUserById(id, {
+      ban_duration: body.active ? 'none' : '876000h', // ~100 years — Supabase's own convention for an indefinite ban
+    });
+    if (banError) return NextResponse.json({ error: banError.message }, { status: 500 });
+  }
+
+  if (body.role === undefined) {
+    const { data } = await supabase.from('profiles').select().eq('id', id).single();
+    return NextResponse.json(data);
   }
 
   const { data, error } = await supabase

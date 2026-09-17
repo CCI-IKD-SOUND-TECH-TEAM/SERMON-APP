@@ -52,7 +52,15 @@ export default async function SeriesDetailPage({ params }: { params: Promise<{ i
     </Link>
   );
 
-  const publishedSermons = (series?.sermons || []).filter((s: Sermon) => s.status === 'published');
+  // Ascending within a series — follow the teaching order (Part 1 first),
+  // unlike the site-wide listings which show newest first.
+  const publishedSermons = (series?.sermons || [])
+    .filter((s: Sermon) => s.status === 'published')
+    .sort((a: Sermon, b: Sermon) => {
+      const dateA = a.sermon_date ? new Date(a.sermon_date).getTime() : 0;
+      const dateB = b.sermon_date ? new Date(b.sermon_date).getTime() : 0;
+      return dateA - dateB;
+    });
 
   return (
     <div style={{ maxWidth: 'var(--container-max)', margin: '0 auto', padding: 'var(--space-8) var(--container-pad)' }}>

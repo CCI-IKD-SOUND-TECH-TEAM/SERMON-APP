@@ -3,6 +3,7 @@
 import React from 'react';
 import Link from 'next/link';
 import {
+  BarChart3,
   Film,
   Image as ImageIcon,
   LayoutDashboard,
@@ -24,6 +25,7 @@ export interface AdminSidebarItem {
 
 export const ADMIN_NAV_ITEMS: AdminSidebarItem[] = [
   { key: 'dashboard', label: 'Dashboard', href: '/admin', icon: LayoutDashboard },
+  { key: 'analytics', label: 'Analytics', href: '/admin/analytics', icon: BarChart3 },
   { key: 'sermons', label: 'Sermons', href: '/admin/sermons', icon: Film },
   { key: 'series', label: 'Series', href: '/admin/series', icon: TagIcon },
   { key: 'albums', label: 'Albums', href: '/admin/albums', icon: ImageIcon },

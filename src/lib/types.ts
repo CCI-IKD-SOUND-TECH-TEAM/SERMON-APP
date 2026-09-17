@@ -75,6 +75,8 @@ export interface Profile {
   role: 'admin' | 'media_editor' | 'member';
   created_at: string;
   email?: string;
+  /** Set (to a future date) when the account has been deactivated. */
+  banned_until?: string | null;
 }
 
 

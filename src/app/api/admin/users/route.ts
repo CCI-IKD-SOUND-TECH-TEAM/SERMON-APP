@@ -24,10 +24,10 @@ export async function GET() {
   const { data: authUsers, error: authError } = await admin.auth.admin.listUsers();
   if (authError) return NextResponse.json({ error: authError.message }, { status: 500 });
 
-  // Merge emails into profiles
+  // Merge email + ban status into profiles
   const merged = profiles.map(p => {
     const au = authUsers.users.find(u => u.id === p.id);
-    return { ...p, email: au?.email };
+    return { ...p, email: au?.email, banned_until: au?.banned_until ?? null };
   });
 
   return NextResponse.json(merged);
