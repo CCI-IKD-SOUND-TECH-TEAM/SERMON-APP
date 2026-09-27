@@ -1,20 +1,35 @@
 'use client';
 
-import React from 'react';
-import { useRouter } from 'next/navigation';
+import React, { Suspense } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { createClient } from '@/lib/supabase/client';
 import { FormField } from '@/components/forms/FormField';
 import { Input } from '@/components/forms/Input';
 import { Button } from '@/components/core/Button';
 import { Eye, EyeOff } from 'lucide-react';
 
-export default function UpdatePasswordPage() {
+function UpdatePasswordForm() {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const reason = searchParams.get('reason'); // 'invite' | 'recovery' | null
   const [password, setPassword] = React.useState('');
   const [confirmPassword, setConfirmPassword] = React.useState('');
   const [showPassword, setShowPassword] = React.useState(false);
   const [loading, setLoading] = React.useState(false);
   const [error, setError] = React.useState<string | null>(null);
+  const [sessionEmail, setSessionEmail] = React.useState<string | null>(null);
+  const [sessionLoaded, setSessionLoaded] = React.useState(false);
+
+  // Surface which account this password change applies to, so a session mix-up
+  // (e.g. testing an invite link in the same browser as an existing login) is
+  // obvious before submitting rather than after.
+  React.useEffect(() => {
+    const supabase = createClient();
+    supabase.auth.getUser().then(({ data }) => {
+      setSessionEmail(data.user?.email ?? null);
+      setSessionLoaded(true);
+    });
+  }, []);
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -43,11 +58,30 @@ export default function UpdatePasswordPage() {
     <div style={{ maxWidth: 400, margin: '0 auto', paddingTop: 'var(--space-12)' }}>
       <div style={{ background: 'var(--color-surface)', border: '1px solid var(--color-border)', borderRadius: 'var(--radius-md)', padding: 'var(--space-8)' }}>
         <h1 style={{ font: 'var(--text-h2)', color: 'var(--color-ink)', margin: '0 0 var(--space-2)' }}>
-          Welcome to Overflow
+          {reason === 'recovery' ? 'Reset your password' : 'Welcome to Overflow'}
         </h1>
-        <p style={{ font: 'var(--text-body)', color: 'var(--color-ink-muted)', margin: '0 0 var(--space-6)' }}>
-          You've been invited! Please set a secure password to complete your account setup.
+        <p style={{ font: 'var(--text-body)', color: 'var(--color-ink-muted)', margin: '0 0 var(--space-4)' }}>
+          {reason === 'recovery'
+            ? 'Enter a new password for your account below.'
+            : "You've been invited! Please set a secure password to complete your account setup."}
         </p>
+
+        {sessionLoaded && (
+          <div
+            style={{
+              background: 'var(--color-bg)',
+              border: '1px solid var(--color-border)',
+              borderRadius: 'var(--radius-sm)',
+              padding: '10px 14px',
+              marginBottom: 'var(--space-6)',
+              font: 'var(--text-body-sm)',
+              color: 'var(--color-ink-muted)',
+            }}
+          >
+            Setting a password for{' '}
+            <strong style={{ color: 'var(--color-ink)' }}>{sessionEmail ?? 'an unknown account — no active session was found'}</strong>
+          </div>
+        )}
 
         <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
           {error && (
@@ -98,5 +132,19 @@ export default function UpdatePasswordPage() {
         </form>
       </div>
     </div>
+  );
+}
+
+export default function UpdatePasswordPage() {
+  return (
+    <Suspense
+      fallback={
+        <div style={{ maxWidth: 400, margin: '0 auto', paddingTop: 'var(--space-12)', font: 'var(--text-body)', color: 'var(--color-ink-muted)' }}>
+          Loading…
+        </div>
+      }
+    >
+      <UpdatePasswordForm />
+    </Suspense>
   );
 }

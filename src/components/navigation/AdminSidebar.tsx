@@ -2,6 +2,7 @@
 
 import React from 'react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import {
   BarChart3,
   Film,
@@ -10,11 +11,14 @@ import {
   Tag as TagIcon,
   Users,
   Inbox,
+  LogOut,
   Menu,
+  UserCircle,
   X,
   type LucideIcon,
 } from 'lucide-react';
 import { ThemeToggle } from '@/components/ui/ThemeToggle';
+import { createClient } from '@/lib/supabase/client';
 
 export interface AdminSidebarItem {
   key: string;
@@ -46,9 +50,17 @@ export interface AdminSidebarProps {
  */
 export function AdminSidebar({ items = ADMIN_NAV_ITEMS, active = 'dashboard', collapsed = false }: AdminSidebarProps) {
   const [mobileOpen, setMobileOpen] = React.useState(false);
+  const router = useRouter();
 
   // Close the mobile drawer on route changes (link clicks).
   const handleNavClick = () => setMobileOpen(false);
+
+  const handleLogout = async () => {
+    const supabase = createClient();
+    await supabase.auth.signOut();
+    router.push('/admin/login');
+    router.refresh();
+  };
 
   // Lock body scroll when mobile drawer is open.
   React.useEffect(() => {
@@ -62,19 +74,16 @@ export function AdminSidebar({ items = ADMIN_NAV_ITEMS, active = 'dashboard', co
     };
   }, [mobileOpen]);
 
+  const navLinkClass = (isActive: boolean) =>
+    `flex items-center gap-[10px] py-[9px] px-[10px] rounded-sm font-semibold text-[14px] leading-none font-body no-underline ${isActive ? 'bg-primary-light text-primary-dark' : 'bg-transparent text-ink'
+    } ${collapsed ? 'justify-center' : 'justify-start'}`;
+
   /* ── Shared nav link renderer ── */
   const renderNavLinks = (closeFn?: () => void) =>
     items.map((it) => {
-      const isActive = it.key === active;
       const Icon = it.icon;
       return (
-        <Link
-          key={it.key}
-          href={it.href}
-          onClick={closeFn}
-          className={`flex items-center gap-[10px] py-[9px] px-[10px] rounded-sm font-semibold text-[14px] leading-none font-body no-underline ${isActive ? 'bg-primary-light text-primary-dark' : 'bg-transparent text-ink'
-            } ${collapsed ? 'justify-center' : 'justify-start'}`}
-        >
+        <Link key={it.key} href={it.href} onClick={closeFn} className={navLinkClass(it.key === active)}>
           <Icon width={18} height={18} className="shrink-0" />
           {!collapsed && it.label}
         </Link>
@@ -132,7 +141,23 @@ export function AdminSidebar({ items = ADMIN_NAV_ITEMS, active = 'dashboard', co
                 <X width={22} height={22} />
               </button>
             </div>
-            {renderNavLinks(handleNavClick)}
+            <div className="flex flex-col flex-1">{renderNavLinks(handleNavClick)}</div>
+            <div style={{ borderTop: '1px solid var(--color-border)', paddingTop: 8, marginTop: 8 }}>
+              <Link href="/admin/profile" onClick={handleNavClick} className={navLinkClass(active === 'profile')}>
+                <UserCircle width={18} height={18} className="shrink-0" />
+                Profile
+              </Link>
+              <button
+                onClick={() => {
+                  handleNavClick();
+                  handleLogout();
+                }}
+                className="flex items-center gap-[10px] py-[9px] px-[10px] rounded-sm font-semibold text-[14px] leading-none font-body no-underline bg-transparent border-none cursor-pointer text-ink justify-start w-full"
+              >
+                <LogOut width={18} height={18} className="shrink-0" />
+                Log out
+              </button>
+            </div>
           </div>
         </div>
       )}
@@ -159,10 +184,26 @@ export function AdminSidebar({ items = ADMIN_NAV_ITEMS, active = 'dashboard', co
           </Link>
         )}
         {renderNavLinks()}
-        <div style={{ marginTop: 'auto', paddingTop: 16, display: 'flex', justifyContent: collapsed ? 'center' : 'flex-start', padding: collapsed ? '16px 0 0 0' : '16px 10px 0 10px' }}>
-          <ThemeToggle />
+        
+        <div style={{ marginTop: 'auto', paddingTop: 16, borderTop: '1px solid var(--color-border)' }}>
+          <Link href="/admin/profile" className={navLinkClass(active === 'profile')}>
+            <UserCircle width={18} height={18} className="shrink-0" />
+            {!collapsed && 'Profile'}
+          </Link>
+          <button
+            onClick={handleLogout}
+            className={`flex items-center gap-[10px] py-[9px] px-[10px] rounded-sm font-semibold text-[14px] leading-none font-body no-underline bg-transparent border-none cursor-pointer text-ink w-full ${collapsed ? 'justify-center' : 'justify-start'}`}
+          >
+            <LogOut width={18} height={18} className="shrink-0" />
+            {!collapsed && 'Log out'}
+          </button>
         </div>
       </nav>
+
+      {/* ── Desktop-only fixed theme toggle (mobile keeps its own in the top bar) ── */}
+      <div className="hidden md:block fixed top-4 right-4 z-[1000]">
+        <ThemeToggle />
+      </div>
     </>
   );
 }

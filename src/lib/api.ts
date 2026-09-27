@@ -87,6 +87,19 @@ export const api = {
   deleteUser: (id: string) =>
     fetch(`/api/admin/users/${id}`, { method: 'DELETE' }).then(r => json<{ ok: true }>(r)),
 
+  myProfile: () =>
+    fetch('/api/admin/profile').then((r) =>
+      json<{ full_name: string | null; role: string; created_at: string; email?: string }>(r)
+    ),
+  updateMyProfile: (full_name: string) =>
+    fetch('/api/admin/profile', {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ full_name }),
+    }).then((r) =>
+      json<{ full_name: string | null; role: string; created_at: string; email?: string }>(r)
+    ),
+
   content: () => fetch('/api/admin/content').then((r) => json<ContentRow[]>(r)),
   stats: () => fetch('/api/admin/stats').then((r) => json<{ sermons: number, albums: number }>(r)),
   analytics: () =>

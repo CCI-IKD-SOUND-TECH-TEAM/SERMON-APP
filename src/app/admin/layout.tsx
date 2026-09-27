@@ -10,11 +10,26 @@ function activeKey(pathname: string): string {
   const match = [...ADMIN_NAV_ITEMS]
     .sort((a, b) => b.href.length - a.href.length)
     .find((it) => pathname === it.href || pathname.startsWith(`${it.href}/`));
-  return match?.key ?? 'dashboard';
+  if (match) return match.key;
+  if (pathname === '/admin/profile' || pathname.startsWith('/admin/profile/')) return 'profile';
+  return 'dashboard';
 }
+
+// Auth-flow pages render their own full-screen layout — no sidebar/nav chrome.
+const NO_CHROME_ROUTES = ['/admin/login'];
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
+
+  if (NO_CHROME_ROUTES.includes(pathname)) {
+    return (
+      <>
+        <Toaster position="top-right" richColors />
+        {children}
+      </>
+    );
+  }
+
   return (
     <div className="flex bg-bg min-h-screen">
       <AdminSidebar active={activeKey(pathname)} />

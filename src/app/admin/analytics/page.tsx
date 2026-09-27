@@ -112,7 +112,6 @@ function DailyTrendChart({ data }: { data: { date: string; plays: number }[] }) 
                   style={{
                     position: 'relative',
                     flex: 1,
-                    maxWidth: 24,
                     height: `${Math.max(heightPct, 1.5)}%`,
                     background: isHovered ? 'var(--color-primary-dark)' : 'var(--color-primary)',
                     borderRadius: '4px 4px 0 0',
@@ -146,9 +145,18 @@ function DailyTrendChart({ data }: { data: { date: string; plays: number }[] }) 
             })}
           </div>
 
-          <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: 6 }}>
+          <div className="hidden sm:flex" style={{ justifyContent: 'space-between', marginTop: 6 }}>
             {data
-              .filter((_, i) => i % 5 === 0)
+              .filter((_, i) => i % 5 === 0 || i === data.length - 1)
+              .map((d) => (
+                <span key={d.date} style={{ font: 'var(--text-body-sm)', color: 'var(--color-ink-muted)' }}>
+                  {formatShortDate(d.date)}
+                </span>
+              ))}
+          </div>
+          <div className="flex sm:hidden" style={{ justifyContent: 'space-between', marginTop: 6 }}>
+            {data
+              .filter((_, i) => i % 10 === 0 || i === data.length - 1)
               .map((d) => (
                 <span key={d.date} style={{ font: 'var(--text-body-sm)', color: 'var(--color-ink-muted)' }}>
                   {formatShortDate(d.date)}
@@ -244,7 +252,7 @@ export default function AnalyticsPage() {
               key={s.id}
               style={{
                 display: 'flex',
-                alignItems: 'center',
+                alignItems: 'flex-start',
                 gap: 12,
                 padding: 'var(--space-4) var(--space-6)',
                 borderBottom: i < data.mostPlayed.length - 1 ? '1px solid var(--color-border)' : 'none',
@@ -281,9 +289,7 @@ export default function AnalyticsPage() {
                   style={{
                     font: '600 14px/1.3 var(--font-body)',
                     color: 'var(--color-ink)',
-                    whiteSpace: 'nowrap',
-                    overflow: 'hidden',
-                    textOverflow: 'ellipsis',
+                    overflowWrap: 'anywhere',
                   }}
                 >
                   {s.title}

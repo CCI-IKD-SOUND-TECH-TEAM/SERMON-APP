@@ -14,10 +14,11 @@ function LoginForm() {
   const [email, setEmail] = React.useState('');
   const [password, setPassword] = React.useState('');
   const [showPassword, setShowPassword] = React.useState(false);
-  const [mode, setMode] = React.useState<'password' | 'magic_link'>('password');
+  const [mode, setMode] = React.useState<'password' | 'magic_link' | 'forgot_password'>('password');
   const [loading, setLoading] = React.useState(false);
   const [error, setError] = React.useState<string | null>(urlError);
   const [magicLinkSent, setMagicLinkSent] = React.useState(false);
+  const [resetSent, setResetSent] = React.useState(false);
 
   // Clear url error on mount or mode change
   React.useEffect(() => {
@@ -44,6 +45,12 @@ function LoginForm() {
         });
         if (authError) throw authError;
         setMagicLinkSent(true);
+      } else if (mode === 'forgot_password') {
+        const { error: authError } = await supabase.auth.resetPasswordForEmail(email, {
+          redirectTo: redirectUrl,
+        });
+        if (authError) throw authError;
+        setResetSent(true);
       } else {
         const { error: authError } = await supabase.auth.signInWithPassword({
           email,
@@ -60,16 +67,24 @@ function LoginForm() {
     }
   }
 
-  if (magicLinkSent) {
+  if (magicLinkSent || resetSent) {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-bg px-4">
-        <div className="w-full max-w-sm rounded-lg bg-surface p-8 shadow-card text-center">
+      <div className="flex min-h-screen items-center justify-center bg-bg px-6 sm:px-4">
+        <div className="w-full sm:max-w-sm sm:rounded-lg bg-bg sm:bg-surface py-8 sm:p-8 sm:shadow-card text-center">
           <h1 className="font-display text-2xl font-semibold text-ink mb-3">Check your email</h1>
           <p className="font-body text-sm text-ink-muted leading-relaxed">
-            We sent a secure link to <strong className="text-ink">{email}</strong>. Click the link in the email to continue.
+            {resetSent ? (
+              <>We sent a password reset link to <strong className="text-ink">{email}</strong>. Click the link to set a new password.</>
+            ) : (
+              <>We sent a secure link to <strong className="text-ink">{email}</strong>. Click the link in the email to continue.</>
+            )}
           </p>
           <button
-            onClick={() => setMagicLinkSent(false)}
+            onClick={() => {
+              setMagicLinkSent(false);
+              setResetSent(false);
+              setMode('password');
+            }}
             className="mt-6 text-sm font-semibold text-primary hover:text-primary-dark cursor-pointer bg-transparent border-none"
           >
             ← Back to login
@@ -80,11 +95,13 @@ function LoginForm() {
   }
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-bg px-4">
-      <div className="w-full max-w-sm rounded-lg bg-surface p-8 shadow-card">
+    <div className="flex min-h-screen items-center justify-center bg-bg px-6 sm:px-4">
+      <div className="w-full sm:max-w-sm sm:rounded-lg bg-bg sm:bg-surface py-10 sm:p-8 sm:shadow-card">
         <div className="text-center mb-8">
           <h1 className="font-display text-3xl font-semibold text-ink mb-1">Overflow</h1>
-          <p className="font-body text-sm text-ink-muted">Sign in to the admin panel</p>
+          <p className="font-body text-sm text-ink-muted">
+            {mode === 'forgot_password' ? "Enter your email and we'll send you a reset link" : 'Sign in to the admin panel'}
+          </p>
         </div>
 
         <form onSubmit={handleSubmit} className="flex flex-col gap-4">
@@ -135,6 +152,16 @@ function LoginForm() {
                   {showPassword ? <EyeOff width={16} height={16} /> : <Eye width={16} height={16} />}
                 </button>
               </div>
+              <button
+                type="button"
+                onClick={() => {
+                  setMode('forgot_password');
+                  setError(null);
+                }}
+                className="self-end text-xs font-semibold text-ink-muted hover:text-ink cursor-pointer bg-transparent border-none font-body mt-1"
+              >
+                Forgot password?
+              </button>
             </div>
           )}
 
@@ -147,21 +174,36 @@ function LoginForm() {
               ? 'Please wait…'
               : mode === 'magic_link'
                 ? 'Send magic link'
-                : 'Sign in'}
+                : mode === 'forgot_password'
+                  ? 'Send reset link'
+                  : 'Sign in'}
           </button>
         </form>
 
         <div className="mt-6 flex flex-col gap-3 text-center">
-          <button
-            type="button"
-            onClick={() => {
-              setMode(mode === 'password' ? 'magic_link' : 'password');
-              setError(null);
-            }}
-            className="text-sm font-semibold text-ink-muted hover:text-ink cursor-pointer bg-transparent border-none font-body"
-          >
-            {mode === 'password' ? 'Use magic link instead' : 'Use password instead'}
-          </button>
+          {mode === 'forgot_password' ? (
+            <button
+              type="button"
+              onClick={() => {
+                setMode('password');
+                setError(null);
+              }}
+              className="text-sm font-semibold text-ink-muted hover:text-ink cursor-pointer bg-transparent border-none font-body"
+            >
+              ← Back to login
+            </button>
+          ) : (
+            <button
+              type="button"
+              onClick={() => {
+                setMode(mode === 'password' ? 'magic_link' : 'password');
+                setError(null);
+              }}
+              className="text-sm font-semibold text-ink-muted hover:text-ink cursor-pointer bg-transparent border-none font-body"
+            >
+              {mode === 'password' ? 'Use magic link instead' : 'Use password instead'}
+            </button>
+          )}
         </div>
       </div>
     </div>
