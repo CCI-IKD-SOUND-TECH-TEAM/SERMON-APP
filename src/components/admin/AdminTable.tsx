@@ -118,6 +118,7 @@ export function AdminTable<Row extends { id?: string | number }>({
             .admin-table td:first-child {
               grid-column: 1;
               grid-row: 1;
+              min-width: 0;
               font-weight: 600;
               border-bottom: 1px solid var(--color-border);
               justify-content: flex-start;
@@ -127,6 +128,10 @@ export function AdminTable<Row extends { id?: string | number }>({
             }
             .admin-table td:first-child > * {
               text-align: left;
+              min-width: 0;
+            }
+            .admin-table td:first-child span {
+              overflow-wrap: anywhere;
             }
             .admin-table td.actions-cell {
               grid-column: 2;

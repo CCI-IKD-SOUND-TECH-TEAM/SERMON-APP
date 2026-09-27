@@ -12,6 +12,13 @@ export async function GET(request: NextRequest) {
   if (token_hash && type) {
     const supabase = await createClient();
 
+    // Clear any session already in this browser first — otherwise, if the
+    // link is opened in the same browser as an existing (different) session,
+    // verifyOtp's new session and the stale one can collide over the shared
+    // cookie storage, and a later action (e.g. setting a password) can end
+    // up acting on the wrong account.
+    await supabase.auth.signOut();
+
     const { error } = await supabase.auth.verifyOtp({
       type,
       token_hash,
@@ -21,12 +28,13 @@ export async function GET(request: NextRequest) {
       // redirect user to specified redirect URL
       const nextUrl = request.nextUrl.clone();
       
-      if (type === 'invite') {
+      if (type === 'invite' || type === 'recovery') {
         nextUrl.pathname = '/admin/update-password';
+        nextUrl.searchParams.set('reason', type);
       } else {
         nextUrl.pathname = next;
       }
-      
+
       nextUrl.searchParams.delete('token_hash');
       nextUrl.searchParams.delete('type');
       nextUrl.searchParams.delete('next');

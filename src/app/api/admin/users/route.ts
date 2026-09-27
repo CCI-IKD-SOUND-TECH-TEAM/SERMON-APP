@@ -48,9 +48,14 @@ export async function POST(request: Request) {
   if (!email || !role) return NextResponse.json({ error: 'Missing email or role' }, { status: 400 });
 
   const admin = createAdminClient();
-  
+
   // 1. Invite user
-  const { data: inviteData, error: inviteError } = await admin.auth.admin.inviteUserByEmail(email);
+  // redirectTo must also be added to Supabase's Auth > URL Configuration > Redirect URLs
+  // allow list, or Supabase silently falls back to the dashboard's Site URL.
+  const origin = new URL(request.url).origin;
+  const { data: inviteData, error: inviteError } = await admin.auth.admin.inviteUserByEmail(email, {
+    redirectTo: `${origin}/auth/confirm`,
+  });
   if (inviteError) {
     console.error('Invite error:', inviteError);
     const status = inviteError.status || 500;
