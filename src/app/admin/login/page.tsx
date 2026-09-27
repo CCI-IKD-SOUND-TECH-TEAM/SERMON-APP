@@ -179,32 +179,6 @@ function LoginForm() {
                   : 'Sign in'}
           </button>
         </form>
-
-        <div className="mt-6 flex flex-col gap-3 text-center">
-          {mode === 'forgot_password' ? (
-            <button
-              type="button"
-              onClick={() => {
-                setMode('password');
-                setError(null);
-              }}
-              className="text-sm font-semibold text-ink-muted hover:text-ink cursor-pointer bg-transparent border-none font-body"
-            >
-              ← Back to login
-            </button>
-          ) : (
-            <button
-              type="button"
-              onClick={() => {
-                setMode(mode === 'password' ? 'magic_link' : 'password');
-                setError(null);
-              }}
-              className="text-sm font-semibold text-ink-muted hover:text-ink cursor-pointer bg-transparent border-none font-body"
-            >
-              {mode === 'password' ? 'Use magic link instead' : 'Use password instead'}
-            </button>
-          )}
-        </div>
       </div>
     </div>
   );
